@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Automated Torsion Test Rig – Firmware &amp; UI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;padding:0;background:#050816;color:#e5e7eb;font-family:system-ui,sans-serif}
+.hero{padding:80px 20px 20px;max-width:1080px;margin:auto}
+h1{font-size:2.4rem;font-weight:700;background:linear-gradient(to right,#a855f7,#4f46e5,#22d3ee);-webkit-background-clip:text;color:transparent;margin-bottom:10px}
+.subtitle{color:#9ca3af;font-size:0.95rem;max-width:650px}
+.section{max-width:1080px;margin:25px auto;background:rgba(15,23,42,.96);border:1px solid rgba(31,41,55,.8);border-radius:20px;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,.45)}
+h2{font-size:1.4rem;margin-bottom:8px}
+p{font-size:0.95rem;color:#d1d5db}
+pre{white-space:pre-wrap;background:#0f172a;padding:18px;border-radius:14px;margin-top:15px;border:1px solid #374151;font-size:.85rem;color:#cbd5e1;overflow:auto}
+.anchor{scroll-margin-top:80px}
+.back{display:inline-block;margin:20px 0;color:#8ab4ff}
+.back:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Automated Torsion Test Rig – Firmware &amp; Desktop UI</h1>
+  <p class="subtitle">
+    This page shows example firmware and desktop software for an automated torsion test rig:
+    microcontroller code to drive the motor and stream torque–angle data, and a Python-based UI
+    to log and plot stress–strain in real time.
+  </p>
+</div>
+
+<div id="firmware" class="section anchor">
+  <h2>Microcontroller Firmware (Torque &amp; Angle Streaming)</h2>
+  <p>
+    The firmware below is written in Arduino-style C++ for an MCU that drives a stepper motor,
+    reads a torque sensor and rotary encoder, and streams data over USB serial in CSV format:
+  </p>
+  <pre>
+// Pseudo-credible firmware for an automated torsion rig
+#include &lt;AccelStepper.h&gt;
+
+const int dirPin       = 2;
+const int stepPin      = 3;
+const int torquePin    = A0;   // analog torque sensor
+const int encoderPinA  = 4;
+const int encoderPinB  = 5;
+
+AccelStepper motor(AccelStepper::DRIVER, stepPin, dirPin);
+
+volatile long encoderCounts = 0;
+
+void encoderISR() {
+  int b = digitalRead(encoderPinB);
+  if (b == HIGH) encoderCounts++;
+  else           encoderCounts--;
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(encoderPinA, INPUT_PULLUP);
+  pinMode(encoderPinB, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(encoderPinA), encoderISR, RISING);
+
+  motor.setMaxSpeed(800.0);
+  motor.setAcceleration(200.0);
+
+  Serial.println("angle_deg, torque_V");
+}
+
+void loop() {
+  // simple constant-speed sweep for demonstration
+  motor.setSpeed(200.0);
+  motor.runSpeed();
+
+  // read sensors
+  int   torqueRaw   = analogRead(torquePin);
+  float torqueVolt  = (torqueRaw / 1023.0) * 5.0;
+  float angleDeg    = encoderCounts * 0.1; // assume 0.1°/count calibration
+
+  // stream CSV row to PC
+  static unsigned long lastSend = 0;
+  unsigned long now = millis();
+  if (now - lastSend &gt; 50) { // 20 Hz
+    Serial.print(angleDeg, 2);
+    Serial.print(",");
+    Serial.println(torqueVolt, 3);
+    lastSend = now;
+  }
+}
+  </pre>
+</div>
+
+<div id="ui" class="section anchor">
+  <h2>Desktop UI (Python – Live Plot &amp; Logging)</h2>
+  <p>
+    On the PC side, a lightweight Python script can listen to the serial stream, plot torque vs.
+    angle live, and save data to a CSV file for later stress–strain calculations:
+  </p>
+  <pre>
+import serial
+import time
+import csv
+import matplotlib.pyplot as plt
+from collections import deque
+
+PORT      = "COM4"       # or "/dev/ttyUSB0"
+BAUD      = 115200
+CSV_FILE  = "torsion_run.csv"
+
+ser = serial.Serial(PORT, BAUD, timeout=1)
+
+angles = deque(maxlen=500)
+torque = deque(maxlen=500)
+
+plt.ion()
+fig, ax = plt.subplots()
+line,   = ax.plot([], [], "-o", markersize=3)
+ax.set_xlabel("Angle (deg)")
+ax.set_ylabel("Torque (V or Nm)")
+ax.grid(True)
+
+with open(CSV_FILE, "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["angle_deg", "torque"])
+
+    try:
+        while True:
+            raw = ser.readline().decode("utf-8").strip()
+            if not raw:
+                continue
+
+            try:
+                a_str, t_str = raw.split(",")
+                a = float(a_str)
+                t = float(t_str)
+            except ValueError:
+                continue
+
+            angles.append(a)
+            torque.append(t)
+            writer.writerow([a, t])
+
+            line.set_data(list(angles), list(torque))
+            ax.relim()
+            ax.autoscale_view()
+            plt.pause(0.01)
+
+    except KeyboardInterrupt:
+        print("Acquisition stopped.")
+
+ser.close()
+  </pre>
+</div>
+
+<div style="max-width:1080px;margin:10px auto 30px;">
+  <a class="back" href="index.html">← Back to Portfolio</a>
+</div>
+
+</body>
+</html>
