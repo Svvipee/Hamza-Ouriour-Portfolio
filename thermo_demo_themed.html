@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<title>Thermo‑Fluids Cycle Visualizer Demo | Hamza Ouriour</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<style>
+/* --- GLOBAL THEME MATCH (Dark Futuristic Mesh Aesthetic) --- */
+body {
+  margin:0; padding:0;
+  background:#050816;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color:#f9fafb;
+}
+.hero {
+  padding:80px 20px 40px;
+  max-width:1080px;
+  margin:auto;
+}
+h1 {
+  font-size:2.4rem;
+  font-weight:700;
+  background:linear-gradient(to right,#a855f7,#4f46e5,#22d3ee);
+  -webkit-background-clip:text;
+  color:transparent;
+  margin-bottom:10px;
+}
+.subtitle {
+  color:#9ca3af;
+  font-size:0.95rem;
+  max-width:600px;
+}
+
+/* Panel */
+.panel {
+  max-width:1080px;
+  margin:30px auto;
+  background:rgba(15,23,42,0.96);
+  border:1px solid rgba(31,41,55,0.8);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.45);
+}
+
+/* Inputs */
+label {
+  display:block;
+  margin-top:18px;
+  color:#cbd5e1;
+  font-size:0.92rem;
+}
+input {
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  border-radius:10px;
+  border:1px solid #374151;
+  background:#0f172a;
+  color:white;
+  font-size:1rem;
+}
+
+/* Button */
+button {
+  margin-top:25px;
+  padding:12px 22px;
+  background:linear-gradient(135deg,#4f46e5,#9333ea);
+  border:none;
+  border-radius:12px;
+  color:white;
+  cursor:pointer;
+  font-size:1rem;
+  box-shadow:0 10px 25px rgba(79,70,229,0.4);
+}
+button:hover {
+  filter:brightness(1.1);
+  transform:translateY(-2px);
+}
+
+/* Canvas */
+canvas {
+  width:100%;
+  margin-top:30px;
+  border-radius:16px;
+  background:#0f172a;
+  border:1px solid #374151;
+}
+
+/* Back link */
+.back {
+  display:inline-block;
+  margin:20px 0 0;
+  color:#8ab4ff;
+  font-size:0.9rem;
+}
+.back:hover { text-decoration:underline; }
+
+</style>
+</head>
+
+<body>
+
+<div class='hero'>
+  <h1>Thermo‑Fluids Cycle Visualizer Demo</h1>
+  <p class='subtitle'>Interactive simulation of a simplified ideal Brayton cycle with real‑time graphing and efficiency calculation.</p>
+</div>
+
+<div class='panel'>
+
+  <label>Pressure Ratio (P₂/P₁)</label>
+  <input type='number' id='pr' value='8' min='1' step='0.1'>
+
+  <label>Specific Heat Ratio γ</label>
+  <input type='number' id='gamma' value='1.4' min='1.1' max='1.67' step='0.01'>
+
+  <label>Inlet Temperature (K)</label>
+  <input type='number' id='T1' value='300' min='200' step='1'>
+
+  <button onclick='runCycle()'>Run Cycle</button>
+
+  <div id='result'></div>
+
+  <canvas id='chart' width='900' height='420'></canvas>
+
+  <a href='index.html' class='back'>← Back to Portfolio</a>
+
+</div>
+
+<script>
+function runCycle() {
+  const pr = parseFloat(document.getElementById('pr').value);
+  const gamma = parseFloat(document.getElementById('gamma').value);
+  const T1 = parseFloat(document.getElementById('T1').value);
+
+  const T2 = T1 * Math.pow(pr, (gamma - 1) / gamma);
+  const T3 = T2 * 2.5;
+  const T4 = T3 / Math.pow(pr, (gamma - 1) / gamma);
+  const eff = 1 - 1 / Math.pow(pr, (gamma - 1) / gamma);
+
+  document.getElementById('result').innerHTML =
+    `<p style='margin-top:20px;font-size:1rem;'>
+      <strong>Thermal Efficiency:</strong> ${(eff*100).toFixed(2)}%<br><br>
+      <strong>T₂:</strong> ${T2.toFixed(1)} K &nbsp;&nbsp;
+      <strong>T₃:</strong> ${T3.toFixed(1)} K &nbsp;&nbsp;
+      <strong>T₄:</strong> ${T4.toFixed(1)} K
+     </p>`;
+
+  drawChart(T1, T2, T3, T4);
+}
+
+function drawChart(T1, T2, T3, T4) {
+  const canvas = document.getElementById("chart");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.strokeStyle="#4f46e5";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(50,380); ctx.lineTo(850,380);
+  ctx.moveTo(50,380); ctx.lineTo(50,40);
+  ctx.stroke();
+
+  const scale = (T)=> 380 - (T/ (T4*1.2)) * 320;
+
+  const pts = [
+    {x:150, y:scale(T1)},
+    {x:350, y:scale(T2)},
+    {x:550, y:scale(T3)},
+    {x:750, y:scale(T4)}
+  ];
+
+  ctx.strokeStyle="#a855f7";
+  ctx.lineWidth=3;
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for(let p of pts) ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+
+  ctx.fillStyle="#22d3ee";
+  for(let p of pts){
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,6,0,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+runCycle();
+</script>
+
+</body>
+</html>
