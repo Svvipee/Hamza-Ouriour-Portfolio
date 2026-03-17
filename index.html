@@ -2,814 +2,437 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Hamza Ouriour | Mechanical & Software Engineer</title>
+  <title>Hamza Ouriour | Mechanical &amp; Software Engineer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --bg: #050816;
-      --bg-alt: #0b1020;
-      --accent: #4f46e5;
-      --accent-soft: rgba(79, 70, 229, 0.12);
-      --text: #f9fafb;
-      --muted: #9ca3af;
-      --card: #111827;
-      --border: #1f2937;
-      --radius-xl: 18px;
-      --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.45);
+      --bg:             #080808;
+      --bg-alt:         #101010;
+      --accent:         #ffffff;
+      --accent-soft:    rgba(255, 255, 255, 0.07);
+      --text:           #f0f0f0;
+      --muted:          #888888;
+      --card:           #111111;
+      --border:         #1e1e1e;
+      --radius-xl:      18px;
+      --shadow-soft:    0 20px 40px rgba(0, 0, 0, 0.6);
       --transition-fast: 0.2s ease-out;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #111827 0, var(--bg) 55%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #181818 0, var(--bg) 60%);
       color: var(--text);
       line-height: 1.6;
       scroll-behavior: smooth;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
+    /* ── HEADER / NAV ───────────────────────────────────────── */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      position: sticky; top: 0; z-index: 50;
       backdrop-filter: blur(16px);
-      background: linear-gradient(
-        to bottom,
-        rgba(5, 8, 22, 0.9),
-        rgba(5, 8, 22, 0.4),
-        transparent
-      );
-      border-bottom: 1px solid rgba(31, 41, 55, 0.6);
+      background: linear-gradient(to bottom, rgba(8,8,8,0.92), rgba(8,8,8,0.4), transparent);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     .nav {
-      max-width: 1080px;
-      margin: 0 auto;
+      max-width: 1080px; margin: 0 auto;
       padding: 0.75rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     }
 
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
+    .nav-left { display: flex; align-items: center; gap: 0.6rem; }
 
     .logo-dot {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #a855f7, #2563eb);
-      box-shadow: 0 0 25px rgba(79, 70, 229, 0.8);
+      width: 32px; height: 32px; border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #555555);
+      box-shadow: 0 0 18px rgba(255,255,255,0.18);
+      flex-shrink: 0;
     }
 
-    .nav-title-main {
-      font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-    }
+    .nav-title-main { font-weight: 600; font-size: 0.95rem; letter-spacing: 0.04em; }
+    .nav-title-sub  { font-size: 0.75rem; color: var(--muted); }
 
-    .nav-title-sub {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
+    .nav-links { display: flex; gap: 1.25rem; font-size: 0.85rem; }
 
-    .nav-links {
-      display: flex;
-      gap: 1.25rem;
-      font-size: 0.85rem;
-    }
-
-    .nav-links a {
-      position: relative;
-      padding-bottom: 0.1rem;
-    }
+    .nav-links a { position: relative; padding-bottom: 0.1rem; }
 
     .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 2px;
-      border-radius: 999px;
-      background: linear-gradient(to right, #a855f7, #4f46e5);
+      content: ""; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 2px; border-radius: 999px;
+      background: #ffffff;
       transition: width var(--transition-fast);
     }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
+    .nav-links a:hover::after { width: 100%; }
 
     .nav-cta {
-      font-size: 0.82rem;
-      padding: 0.4rem 0.9rem;
-      border-radius: 999px;
-      border: 1px solid rgba(129, 140, 248, 0.7);
-      background: linear-gradient(
-        to right,
-        rgba(79, 70, 229, 0.16),
-        rgba(129, 140, 248, 0.05)
-      );
-      box-shadow: 0 0 20px rgba(79, 70, 229, 0.25);
+      font-size: 0.82rem; padding: 0.4rem 0.9rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 0 16px rgba(255,255,255,0.06);
+      transition: border-color var(--transition-fast), background var(--transition-fast);
     }
+    .nav-cta:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
 
     .nav-toggle {
-      display: none;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      font-size: 1.3rem;
-      cursor: pointer;
+      display: none; border: none; background: transparent;
+      color: var(--text); font-size: 1.3rem; cursor: pointer;
     }
 
     @media (max-width: 720px) {
-      .nav-links,
-      .nav-cta {
-        display: none;
-      }
-      .nav-toggle {
-        display: block;
-      }
+      .nav-links, .nav-cta { display: none; }
+      .nav-toggle { display: block; }
       .nav-links.mobile-open {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        position: absolute;
-        right: 1.25rem;
-        top: 3.2rem;
-        padding: 0.75rem 1rem;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.98);
-        border: 1px solid rgba(31, 41, 55, 0.8);
+        display: flex; flex-direction: column; align-items: flex-end;
+        position: absolute; right: 1.25rem; top: 3.2rem;
+        padding: 0.75rem 1rem; border-radius: 16px;
+        background: rgba(10,10,10,0.98);
+        border: 1px solid rgba(255,255,255,0.07);
         box-shadow: var(--shadow-soft);
       }
     }
 
-    main {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 1.5rem 1.25rem 4rem;
-    }
-
-    section {
-      margin-top: 3.5rem;
-    }
+    /* ── LAYOUT ─────────────────────────────────────────────── */
+    main { max-width: 1080px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+    section { margin-top: 3.5rem; }
 
     .section-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--muted);
-      margin-bottom: 0.4rem;
+      font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 0.18em; color: var(--muted); margin-bottom: 0.4rem;
     }
 
-    .section-title {
-      font-size: 1.7rem;
-      font-weight: 650;
-      margin-bottom: 1.1rem;
-    }
+    .section-title { font-size: 1.7rem; font-weight: 650; margin-bottom: 1.1rem; }
 
+    /* ── HERO ───────────────────────────────────────────────── */
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
-      gap: 2.4rem;
-      align-items: center;
-      margin-top: 2.5rem;
+      gap: 2.4rem; align-items: center; margin-top: 2.5rem;
     }
-
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
+    @media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr); } }
 
     .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.2rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid rgba(75, 85, 99, 0.8);
-      background: rgba(15, 23, 42, 0.9);
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 0.7rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.2rem 0.7rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(16,16,16,0.9);
+      font-size: 0.75rem; color: var(--muted); margin-bottom: 0.7rem;
     }
-
     .hero-tag span {
-      font-size: 0.65rem;
-      padding: 0.1rem 0.4rem;
-      border-radius: 999px;
-      background: rgba(79, 70, 229, 0.16);
-      color: #a5b4fc;
+      font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 999px;
+      background: rgba(255,255,255,0.08); color: #bbbbbb;
     }
 
-    .hero-title {
-      font-size: clamp(2.2rem, 4vw, 2.7rem);
-      font-weight: 700;
-      margin-bottom: 0.9rem;
-    }
+    .hero-title { font-size: clamp(2.2rem, 4vw, 2.7rem); font-weight: 700; margin-bottom: 0.9rem; }
 
     .gradient-text {
-      background: linear-gradient(to right, #a855f7, #4f46e5, #22d3ee);
-      -webkit-background-clip: text;
-      color: transparent;
+      background: linear-gradient(to right, #ffffff, #888888);
+      -webkit-background-clip: text; color: transparent;
     }
 
-    .hero-subtitle {
-      color: var(--muted);
-      font-size: 0.95rem;
-      max-width: 34rem;
-      margin-bottom: 1.2rem;
-    }
+    .hero-subtitle { color: var(--muted); font-size: 0.95rem; max-width: 34rem; margin-bottom: 1.2rem; }
 
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.4rem;
-    }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
 
     .badge {
-      font-size: 0.72rem;
-      padding: 0.28rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(17, 24, 39, 0.9);
-      color: var(--muted);
+      font-size: 0.72rem; padding: 0.28rem 0.6rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(16,16,16,0.9); color: var(--muted);
     }
 
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      align-items: center;
-    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; }
 
     .btn-primary {
-      border-radius: 999px;
-      padding: 0.5rem 1.1rem;
-      font-size: 0.85rem;
-      border: none;
-      cursor: pointer;
-      background: linear-gradient(135deg, #4f46e5, #a855f7);
-      color: white;
-      box-shadow: 0 14px 30px rgba(79, 70, 229, 0.55);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-        filter var(--transition-fast);
+      border-radius: 999px; padding: 0.5rem 1.1rem; font-size: 0.85rem;
+      border: none; cursor: pointer;
+      background: #ffffff; color: #080808;
+      box-shadow: 0 10px 28px rgba(255,255,255,0.18);
+      font-weight: 600;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
     }
-
     .btn-primary:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.05);
-      box-shadow: 0 18px 35px rgba(79, 70, 229, 0.7);
+      transform: translateY(-1px); filter: brightness(0.92);
+      box-shadow: 0 16px 36px rgba(255,255,255,0.25);
     }
 
     .btn-ghost {
-      border-radius: 999px;
-      padding: 0.45rem 1rem;
-      font-size: 0.83rem;
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      background: rgba(15, 23, 42, 0.85);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      color: var(--muted);
-      transition: background var(--transition-fast), border-color var(--transition-fast),
-        transform var(--transition-fast);
+      border-radius: 999px; padding: 0.45rem 1rem; font-size: 0.83rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(16,16,16,0.85); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.3rem; color: var(--muted);
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
     }
-
     .btn-ghost:hover {
-      background: rgba(15, 23, 42, 1);
-      border-color: rgba(148, 163, 184, 0.9);
-      transform: translateY(-1px);
+      background: rgba(20,20,20,1); border-color: rgba(255,255,255,0.3);
+      color: var(--text); transform: translateY(-1px);
     }
+    .btn-ghost span.icon { font-size: 1rem; }
 
-    .btn-ghost span.icon {
-      font-size: 1rem;
-    }
-
+    /* ── HERO PANEL ─────────────────────────────────────────── */
     .hero-panel {
-      border-radius: 24px;
-      padding: 1.1rem 1.1rem 1.2rem;
-      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
-      border: 1px solid rgba(55, 65, 81, 0.85);
+      border-radius: 24px; padding: 1.1rem 1.1rem 1.2rem;
+      background: radial-gradient(circle at top left, #1a1a1a 0, #080808 60%);
+      border: 1px solid rgba(255,255,255,0.07);
       box-shadow: var(--shadow-soft);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-
     .hero-panel-glow {
-      position: absolute;
-      inset: -40%;
+      position: absolute; inset: -40%;
       background:
-        radial-gradient(circle at 10% 0, rgba(56, 189, 248, 0.06) 0, transparent 55%),
-        radial-gradient(circle at 110% 40%, rgba(129, 140, 248, 0.1) 0, transparent 55%);
-      opacity: 0.9;
+        radial-gradient(circle at 10%   0, rgba(255,255,255,0.03) 0, transparent 55%),
+        radial-gradient(circle at 110% 40%, rgba(255,255,255,0.05) 0, transparent 55%);
       pointer-events: none;
     }
-
-    .hero-panel-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.8rem;
-    }
+    .hero-panel-inner { position: relative; z-index: 1; }
+    .hero-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
 
     .hero-pill {
-      font-size: 0.68rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 999px;
+      background: rgba(10,10,10,0.9); border: 1px solid rgba(255,255,255,0.08);
       color: var(--muted);
     }
-
     .hero-status-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 14px rgba(34, 197, 94, 0.8);
+      width: 9px; height: 9px; border-radius: 999px;
+      background: #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
 
     .hero-mesh {
-      border-radius: 18px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: radial-gradient(circle at 20% 20%, #4f46e5 0, transparent 50%),
-        radial-gradient(circle at 80% 80%, #22d3ee 0, transparent 50%),
-        radial-gradient(circle at 10% 80%, #a855f7 0, transparent 55%);
-      padding: 0.85rem;
-      margin-bottom: 1rem;
-      position: relative;
-      overflow: hidden;
+      border-radius: 18px; border: 1px solid rgba(255,255,255,0.07);
+      background:
+        radial-gradient(circle at 20% 20%, #2a2a2a 0, transparent 55%),
+        radial-gradient(circle at 80% 80%, #1a1a1a 0, transparent 55%),
+        radial-gradient(circle at 10% 80%, #333333 0, transparent 55%);
+      padding: 0.85rem; margin-bottom: 1rem; position: relative; overflow: hidden;
     }
-
     .mesh-grid {
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(
-          rgba(15, 23, 42, 0.8) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          to right,
-          rgba(15, 23, 42, 0.8) 1px,
-          transparent 1px
-        );
-      background-size: 24px 24px;
-      opacity: 0.9;
-      pointer-events: none;
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 24px 24px; pointer-events: none;
     }
-
     .mesh-content {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 0.6rem;
-      align-items: center;
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1.3fr 1fr; gap: 0.6rem; align-items: center;
     }
+    @media (max-width: 480px) { .mesh-content { grid-template-columns: 1fr; } }
 
-    @media (max-width: 480px) {
-      .mesh-content {
-        grid-template-columns: 1fr;
-      }
-    }
+    .mesh-main-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.1rem; }
+    .mesh-main-sub   { font-size: 0.75rem; color: #cccccc; margin-bottom: 0.4rem; }
 
-    .mesh-main-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.1rem;
-    }
-
-    .mesh-main-sub {
-      font-size: 0.75rem;
-      color: #e5e7eb;
-      margin-bottom: 0.4rem;
-    }
-
-    .mesh-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      font-size: 0.68rem;
-    }
-
+    .mesh-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; font-size: 0.68rem; }
     .mesh-tag {
-      padding: 0.1rem 0.45rem;
-      border-radius: 999px;
-      border: 1px solid rgba(15, 23, 42, 0.85);
-      background: rgba(15, 23, 42, 0.85);
-      color: #d1d5db;
+      padding: 0.1rem 0.45rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,10,10,0.85); color: #cccccc;
     }
 
     .mesh-meter {
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.8);
-      padding: 0.1rem;
-      border: 1px solid rgba(15, 23, 42, 0.9);
+      border-radius: 999px; background: rgba(10,10,10,0.8);
+      padding: 0.1rem; border: 1px solid rgba(255,255,255,0.07);
     }
-
     .mesh-meter > div {
-      height: 6px;
-      border-radius: 999px;
-      background: linear-gradient(to right, #22c55e, #eab308, #f97316, #ef4444);
+      height: 6px; border-radius: 999px;
+      background: linear-gradient(to right, #2a2a2a, #888888, #ffffff);
       width: 88%;
     }
+    .mesh-legend { font-size: 0.6rem; color: #cccccc; text-align: right; margin-top: 0.25rem; }
 
-    .mesh-legend {
-      font-size: 0.6rem;
-      color: #e5e7eb;
-      text-align: right;
-      margin-top: 0.25rem;
-    }
+    .hero-panel-footer { font-size: 0.75rem; color: var(--muted); }
+    .hero-panel-footer strong { color: var(--text); }
 
+    /* ── ABOUT ──────────────────────────────────────────────── */
     .about-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
-      gap: 2rem;
+      display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr); gap: 2rem;
     }
+    @media (max-width: 900px) { .about-grid { grid-template-columns: minmax(0, 1fr); } }
 
-    @media (max-width: 900px) {
-      .about-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
+    .about-text { font-size: 0.92rem; color: var(--muted); }
+    .about-text p + p { margin-top: 0.6rem; }
 
-    .about-text {
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-
-    .about-text p + p {
-      margin-top: 0.6rem;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.7rem;
-    }
-
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
     .pill {
-      font-size: 0.7rem;
-      padding: 0.24rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.7rem; padding: 0.24rem 0.6rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.09); background: rgba(14,14,14,0.9);
     }
 
     .about-card {
-      border-radius: var(--radius-xl);
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(31, 41, 55, 0.95);
-      padding: 0.9rem 0.95rem;
-      box-shadow: var(--shadow-soft);
-      font-size: 0.8rem;
+      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
+      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
+      box-shadow: var(--shadow-soft); font-size: 0.8rem;
     }
-
-    .about-card h3 {
-      font-size: 0.9rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .about-card-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-top: 0.4rem;
-    }
-
-    .about-card-col ul {
-      list-style: none;
-    }
-
-    .about-card-col li {
-      margin-bottom: 0.28rem;
-      color: var(--muted);
-    }
+    .about-card h3 { font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .about-card-row { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.4rem; }
+    .about-card-col ul { list-style: none; }
+    .about-card-col li { margin-bottom: 0.28rem; color: var(--muted); }
 
     .dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      margin-right: 0.3rem;
-      background: linear-gradient(to right, #4f46e5, #a855f7);
+      display: inline-block; width: 6px; height: 6px; border-radius: 999px;
+      margin-right: 0.3rem; background: #888888;
     }
 
-    .exp-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.2rem;
-    }
+    /* ── EXPERIENCE ─────────────────────────────────────────── */
+    .exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
 
     .exp-card {
-      border-radius: var(--radius-xl);
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(31, 41, 55, 0.95);
-      padding: 0.9rem 0.95rem;
-      box-shadow: var(--shadow-soft);
-      font-size: 0.82rem;
+      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
+      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
+      box-shadow: var(--shadow-soft); font-size: 0.82rem;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
     }
+    .exp-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
 
-    .exp-role {
-      font-weight: 600;
-      font-size: 0.92rem;
-      margin-bottom: 0.1rem;
-    }
+    .exp-role  { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.1rem; }
+    .exp-org   { font-size: 0.82rem; color: #cccccc; margin-bottom: 0.1rem; }
+    .exp-meta  { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .exp-card ul { padding-left: 1rem; color: var(--muted); }
+    .exp-card li { margin-bottom: 0.3rem; }
 
-    .exp-org {
-     	font-size: 0.82rem;
-      color: #e5e7eb;
-      margin-bottom: 0.1rem;
-    }
-
-    .exp-meta {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .exp-card ul {
-      padding-left: 1rem;
-      color: var(--muted);
-    }
-
-    .exp-card li {
-      margin-bottom: 0.3rem;
-    }
-
+    /* ── PROJECTS ───────────────────────────────────────────── */
     .projects-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
+      display: flex; flex-wrap: wrap; align-items: baseline;
+      justify-content: space-between; gap: 0.4rem; margin-bottom: 1rem;
     }
 
     .projects-filter {
-      display: inline-flex;
-      border-radius: 999px;
-      padding: 0.12rem;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 0.95);
-      font-size: 0.72rem;
+      display: inline-flex; border-radius: 999px; padding: 0.12rem;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(10,10,10,0.95); font-size: 0.72rem;
     }
-
     .filter-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 0.2rem 0.7rem;
-      cursor: pointer;
-      background: transparent;
-      color: var(--muted);
+      border: none; border-radius: 999px; padding: 0.2rem 0.7rem;
+      cursor: pointer; background: transparent; color: var(--muted);
       transition: background var(--transition-fast), color var(--transition-fast);
     }
+    .filter-btn.active { background: rgba(255,255,255,0.1); color: #eeeeee; }
 
-    .filter-btn.active {
-      background: rgba(79, 70, 229, 0.2);
-      color: #e5e7eb;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.2rem;
-    }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
 
     .project-card {
-      border-radius: var(--radius-xl);
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(31, 41, 55, 0.95);
-      padding: 0.9rem 0.95rem;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-      position: relative;
-      overflow: hidden;
-      cursor: default;
+      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
+      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      position: relative; overflow: hidden; cursor: default;
       transition: transform var(--transition-fast), box-shadow var(--transition-fast),
         border-color var(--transition-fast), background var(--transition-fast);
     }
-
     .project-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 24px 45px rgba(0, 0, 0, 0.8);
-      border-color: rgba(79, 70, 229, 0.8);
-      background: rgba(15, 23, 42, 0.98);
+      transform: translateY(-3px); box-shadow: 0 24px 45px rgba(0,0,0,0.85);
+      border-color: rgba(255,255,255,0.22); background: rgba(16,16,16,0.98);
     }
 
     .project-chip-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.45rem;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;
     }
-
     .project-type {
-      font-size: 0.65rem;
-      padding: 0.14rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-size: 0.65rem; padding: 0.14rem 0.5rem; border-radius: 999px;
+      background: rgba(10,10,10,0.95); border: 1px solid rgba(255,255,255,0.09);
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .project-pill { font-size: 0.65rem; color: #bbbbbb; }
+
+    .project-title   { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .project-subtitle { font-size: 0.76rem; color: var(--muted); margin-bottom: 0.4rem; }
+
+    .project-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.7rem; margin-bottom: 0.5rem; }
+    .project-meta span {
+      padding: 0.16rem 0.4rem; border-radius: 999px;
+      background: rgba(10,10,10,0.95); border: 1px solid rgba(255,255,255,0.09); color: var(--muted);
     }
 
-    .project-pill {
-      font-size: 0.65rem;
-      color: #a5b4fc;
-    }
-
-    .project-title {
-      font-size: 0.98rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .project-subtitle {
-      font-size: 0.76rem;
-      color: var(--muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .project-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      font-size: 0.7rem;
+    .project-bullets {
+      padding-left: 1rem; color: var(--muted); font-size: 0.72rem;
       margin-bottom: 0.5rem;
     }
+    .project-bullets li { margin-bottom: 0.24rem; }
 
-    .project-meta span {
-      padding: 0.16rem 0.4rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--muted);
+    .project-challenges {
+      margin-bottom: 0.5rem; font-size: 0.72rem;
     }
+    .project-challenges-label {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: #666; margin-bottom: 0.3rem;
+    }
+    .project-challenges ul { padding-left: 1rem; color: var(--muted); }
+    .project-challenges li { margin-bottom: 0.2rem; }
 
     .project-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 0.3rem;
-      font-size: 0.72rem;
-      color: var(--muted);
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 0.3rem; font-size: 0.72rem; color: var(--muted);
     }
-
-    .project-links {
-      display: flex;
-      gap: 0.4rem;
-    }
-
+    .project-links { display: flex; gap: 0.4rem; }
     .project-links a {
-      font-size: 0.72rem;
-      padding: 0.16rem 0.42rem;
-      border-radius: 999px;
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      background: rgba(15, 23, 42, 0.95);
+      font-size: 0.72rem; padding: 0.16rem 0.42rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(10,10,10,0.95);
       transition: background var(--transition-fast), color var(--transition-fast),
         border-color var(--transition-fast), transform var(--transition-fast);
     }
-
     .project-links a:hover {
-      background: rgba(79, 70, 229, 0.22);
-      border-color: rgba(129, 140, 248, 0.9);
-      color: #e5e7eb;
-      transform: translateY(-1px);
+      background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3);
+      color: #e0e0e0; transform: translateY(-1px);
     }
 
+    /* ── CONTACT ────────────────────────────────────────────── */
     .contact-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
-      gap: 1.8rem;
-      align-items: start;
+      display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
+      gap: 1.8rem; align-items: start;
     }
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } }
 
-    @media (max-width: 900px) {
-      .contact-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .contact-text {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
+    .contact-text { font-size: 0.9rem; color: var(--muted); }
 
     .contact-highlight {
-      margin-top: 0.6rem;
-      padding: 0.6rem 0.7rem;
+      margin-top: 0.6rem; padding: 0.6rem 0.7rem;
       border-radius: var(--radius-xl);
-      border: 1px dashed rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 0.95);
-      font-size: 0.8rem;
+      border: 1px dashed rgba(255,255,255,0.11);
+      background: rgba(12,12,12,0.95); font-size: 0.8rem;
     }
+    .contact-highlight span { font-weight: 500; color: #e0e0e0; }
 
-    .contact-highlight span {
-      font-weight: 500;
-      color: #e5e7eb;
-    }
-
-    .contact-list {
-      margin-top: 0.7rem;
-      font-size: 0.85rem;
-    }
-
-    .contact-list div {
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-list a {
-      color: #a5b4fc;
-    }
+    .contact-list { margin-top: 0.7rem; font-size: 0.85rem; }
+    .contact-list div { margin-bottom: 0.2rem; }
+    .contact-list a { color: #cccccc; transition: color var(--transition-fast); }
+    .contact-list a:hover { color: #ffffff; }
 
     .contact-card {
-      border-radius: var(--radius-xl);
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(31, 41, 55, 0.95);
-      padding: 0.9rem 0.95rem;
-      box-shadow: var(--shadow-soft);
-      font-size: 0.8rem;
+      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
+      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
+      box-shadow: var(--shadow-soft); font-size: 0.8rem;
     }
+    .contact-card h3 { font-size: 0.9rem; margin-bottom: 0.45rem; }
 
-    .contact-card h3 {
-      font-size: 0.9rem;
-      margin-bottom: 0.45rem;
-    }
-
-    .contact-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.4rem;
-      margin-bottom: 0.4rem;
-    }
-
+    .contact-row { display: flex; justify-content: space-between; gap: 0.4rem; margin-bottom: 0.4rem; }
     .contact-tag {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 0.96);
-      color: var(--muted);
+      font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(12,12,12,0.96); color: var(--muted);
     }
 
+    /* ── FOOTER ─────────────────────────────────────────────── */
     footer {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 1.5rem 1.25rem 2rem;
-      font-size: 0.75rem;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 0.5rem;
-      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      max-width: 1080px; margin: 0 auto; padding: 1.5rem 1.25rem 2rem;
+      font-size: 0.75rem; color: var(--muted);
+      display: flex; justify-content: space-between; gap: 0.5rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
     }
-
-    footer span strong {
-      color: #e5e7eb;
-    }
-
-    @media (max-width: 640px) {
-      footer {
-        flex-direction: column;
-      }
-    }
+    footer span strong { color: #e0e0e0; }
+    @media (max-width: 640px) { footer { flex-direction: column; } }
   </style>
 </head>
 <body>
+
+  <!-- ── HEADER ─────────────────────────────────────────────── -->
   <header>
     <nav class="nav">
       <div class="nav-left">
         <div class="logo-dot"></div>
         <div>
           <div class="nav-title-main">Hamza Ouriour</div>
-          <div class="nav-title-sub">Mechanical & Software Engineering Student</div>
+          <div class="nav-title-sub">Mechanical &amp; Software Engineering Student</div>
         </div>
       </div>
       <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
@@ -819,30 +442,32 @@
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
       </div>
-      <a href="#contact" class="nav-cta">Let’s talk</a>
+      <a href="#contact" class="nav-cta">Let's talk</a>
     </nav>
   </header>
 
   <main>
+
+    <!-- ── HERO ───────────────────────────────────────────────── -->
     <section id="top" class="hero">
       <div>
         <div class="hero-tag">
           Multidisciplinary Engineer
           <span>Mech × Software</span>
         </div>
-        <h1 class="hero-title">
+        <h1 class="hero-title" data-editable="hero-title">
           I build <span class="gradient-text">machines that think</span>
           and software that flies, roves, and learns.
         </h1>
-        <p class="hero-subtitle">
-          I’m Hamza, a Mechanical & Software Engineering student at Wentworth
-          Institute of Technology (GPA 3.75), with experience on NASA’s
+        <p class="hero-subtitle" data-editable="hero-subtitle">
+          I'm Hamza, a Mechanical &amp; Software Engineering student at Wentworth
+          Institute of Technology (GPA 3.75), with experience on NASA's
           Europa Clipper imaging optimization, Mars mission concept studies,
           and autonomous robotics systems.
         </p>
         <div class="hero-badges">
           <div class="badge">NASA Europa Clipper · EIS Optimization</div>
-          <div class="badge">NASA L’SPACE · Mars Rover Concept</div>
+          <div class="badge">NASA L'SPACE · Mars Rover Concept</div>
           <div class="badge">Python · C++ · ROS · MATLAB</div>
           <div class="badge">CAD · FEA · CFD · SolidWorks (CSWA)</div>
         </div>
@@ -880,45 +505,41 @@
               </div>
               <div>
                 <div class="mesh-meter"><div></div></div>
-                <div class="mesh-legend">
-                  Higher regional coverage · Improved close-up targeting
-                </div>
+                <div class="mesh-legend">Higher coverage · Improved close-up targeting</div>
               </div>
             </div>
           </div>
           <div class="hero-panel-footer">
-            <div>
-              <strong>Focus:</strong> Space systems, robotics, &amp; tools
-            </div>
+            <div><strong>Focus:</strong> Space systems, robotics, &amp; tools</div>
             <div>Code · CAD · Mission analysis</div>
           </div>
         </div>
       </aside>
     </section>
 
+    <!-- ── ABOUT ──────────────────────────────────────────────── -->
     <section id="about">
       <div class="section-label">About</div>
-      <h2 class="section-title">Bridging mechanical systems and intelligent software</h2>
+      <h2 class="section-title" data-editable="about-title">Bridging mechanical systems and intelligent software</h2>
       <div class="about-grid">
         <div class="about-text">
-          <p>
-            I’m studying Mechanical & Software Engineering at Wentworth
+          <p data-editable="about-p1">
+            I'm studying Mechanical &amp; Software Engineering at Wentworth
             Institute of Technology, where I combine solid fundamentals in
             physics and mechanics with modern software and controls.
           </p>
-          <p>
-            Professionally, I’ve contributed to NASA’s Europa Clipper mission
+          <p data-editable="about-p2">
+            Professionally, I've contributed to NASA's Europa Clipper mission
             through EIS imaging optimization, led systems engineering work in
-            NASA’s L’SPACE academy on Mars robotic lander/rover concepts, and
+            NASA's L'SPACE academy on Mars robotic lander/rover concepts, and
             developed robotics software for autonomous platforms at Starship
             Robotics.
           </p>
-          <p>
+          <p data-editable="about-p3">
             I like projects where I own the pipeline end-to-end: CAD and FEA,
             mission or system analysis, embedded/desktop tools, and the
             software that glues hardware, data, and operators together.
           </p>
-
           <div class="pill-row">
             <span class="pill">Siemens NX · SolidWorks (CSWA)</span>
             <span class="pill">Finite Element Analysis (FEA)</span>
@@ -932,19 +553,19 @@
           <h3>Snapshot</h3>
           <div class="about-card-row">
             <div class="about-card-col">
-              <ul>
+              <ul data-editable="about-snap-left">
                 <li><span class="dot"></span>NASA Europa Clipper ICONS Intern</li>
-                <li><span class="dot"></span>L’SPACE MCA Lead Systems Engineer</li>
-                <li><span class="dot"></span>Robotics Engineer & Data Scientist</li>
-                <li><span class="dot"></span>Mechanical & Software Eng @ WIT</li>
+                <li><span class="dot"></span>L'SPACE MCA Lead Systems Engineer</li>
+                <li><span class="dot"></span>Robotics Engineer &amp; Data Scientist</li>
+                <li><span class="dot"></span>Mechanical &amp; Software Eng @ WIT</li>
               </ul>
             </div>
             <div class="about-card-col">
-              <ul>
+              <ul data-editable="about-snap-right">
                 <li><span class="dot"></span>GPA: 3.75</li>
                 <li><span class="dot"></span>Certified SolidWorks Associate (CSWA)</li>
-                <li><span class="dot"></span>Space & robotics focus</li>
-                <li><span class="dot"></span>Hands-on lab & coding experience</li>
+                <li><span class="dot"></span>Space &amp; robotics focus</li>
+                <li><span class="dot"></span>Hands-on lab &amp; coding experience</li>
               </ul>
             </div>
           </div>
@@ -952,16 +573,17 @@
       </div>
     </section>
 
+    <!-- ── EXPERIENCE ─────────────────────────────────────────── -->
     <section id="experience">
       <div class="section-label">Experience</div>
-      <h2 class="section-title">Recent roles & mission work</h2>
+      <h2 class="section-title" data-editable="exp-title">Recent roles &amp; mission work</h2>
 
       <div class="exp-grid">
         <article class="exp-card">
-          <div class="exp-role">ICONS Intern · EIS Optimization Engineer · Software Developer</div>
-          <div class="exp-org">NASA · Europa Clipper</div>
-          <div class="exp-meta">Jun 2024 – Sep 2024 · Remote / MA</div>
-          <ul>
+          <div class="exp-role" data-editable="exp-1-role">ICONS Intern · EIS Optimization Engineer · Software Developer</div>
+          <div class="exp-org"  data-editable="exp-1-org">NASA · Europa Clipper</div>
+          <div class="exp-meta" data-editable="exp-1-meta">Jun 2024 – Sep 2024 · Remote / MA</div>
+          <ul data-editable="exp-1-bullets">
             <li>Helped develop and refine the SIMPLEX software to optimize frames and images for the Europa Imaging System (EIS) on Europa Clipper.</li>
             <li>Worked with regional imaging strategies that bridge global views and close-up observations to improve science return.</li>
             <li>Tuned input parameters and workflows to boost the utility of regional imaging for both scientific and look-ahead targeting.</li>
@@ -969,10 +591,10 @@
         </article>
 
         <article class="exp-card">
-          <div class="exp-role">Lead Systems Engineer</div>
-          <div class="exp-org">NASA L’SPACE MCA</div>
-          <div class="exp-meta">Dec 2023 – May 2024</div>
-          <ul>
+          <div class="exp-role" data-editable="exp-2-role">Lead Systems Engineer</div>
+          <div class="exp-org"  data-editable="exp-2-org">NASA L'SPACE MCA</div>
+          <div class="exp-meta" data-editable="exp-2-meta">Dec 2023 – May 2024</div>
+          <ul data-editable="exp-2-bullets">
             <li>Led systems engineering efforts on a Mars mission concept focused on volcanic emissions, water vapor, and subsurface ice.</li>
             <li>Used NX CAD and robotic concepts to design a lander/rover system for sampling geological elements like ice deposits and minerals.</li>
             <li>Connected atmospheric science, mission objectives, and hardware capabilities into a coherent architecture.</li>
@@ -980,10 +602,10 @@
         </article>
 
         <article class="exp-card">
-          <div class="exp-role">Robotics Engineer & Data Scientist</div>
-          <div class="exp-org">Starship Robotics</div>
-          <div class="exp-meta">Aug 2023 – Apr 2024</div>
-          <ul>
+          <div class="exp-role" data-editable="exp-3-role">Robotics Engineer &amp; Data Scientist</div>
+          <div class="exp-org"  data-editable="exp-3-org">Starship Robotics</div>
+          <div class="exp-meta" data-editable="exp-3-meta">Aug 2023 – Apr 2024</div>
+          <ul data-editable="exp-3-bullets">
             <li>Developed and optimized robotics software in Python and C++ for autonomous navigation and control on embedded Linux systems.</li>
             <li>Integrated machine learning and computer vision into the autonomy stack; debugged and profiled code for real-time execution.</li>
             <li>Designed custom electronic components and supported educational robotics workshops.</li>
@@ -992,10 +614,11 @@
       </div>
     </section>
 
+    <!-- ── PROJECTS ────────────────────────────────────────────── -->
     <section id="projects">
       <div class="section-label">Projects</div>
       <div class="projects-header">
-        <h2 class="section-title">Selected mechanical & software projects</h2>
+        <h2 class="section-title">Selected mechanical &amp; software projects</h2>
         <div class="projects-filter">
           <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="mech">Mechanical</button>
@@ -1004,13 +627,47 @@
       </div>
 
       <div class="projects-grid">
+
+        <!-- UAV LiDAR ─────────────────────────────────────────── -->
+        <article class="project-card" data-tags="mech soft">
+          <div class="project-chip-row">
+            <div class="project-type">Robotics &amp; Autonomy</div>
+            <div class="project-pill" data-editable="proj-uav-pill">ROS Noetic · VLP-16 LiDAR</div>
+          </div>
+          <h3 class="project-title" data-editable="proj-uav-title">Autonomous UAV LiDAR Navigation System</h3>
+          <p class="project-subtitle" data-editable="proj-uav-sub">
+            Engineered a GPS-denied quadrotor that autonomously navigates through a 16 m × 16 m
+            cluttered warehouse obstacle field using only a Velodyne VLP-16 LiDAR — no pre-built map,
+            no hand-coded route. Built on ROS Noetic / Gazebo 11 / Ubuntu 20.04 / WSL2.
+          </p>
+          <div class="project-meta">
+            <span>ROS Noetic · Python</span>
+            <span>Gazebo 11 / WSL2</span>
+            <span>A* · Occupancy Grid</span>
+            <span>Velodyne VLP-16</span>
+          </div>
+          <ul class="project-bullets" data-editable="proj-uav-bullets">
+            <li>Dual-layer control: 50 Hz reactive layer blending M-line attraction with 5-sector LiDAR avoidance; 0.2 Hz A* global planner on a live occupancy grid for visualization and recovery.</li>
+            <li>Custom 3D→2D LiDAR pipeline: horizontal-band slicing of VLP-16 point clouds, 0.45 m proximity filter to eliminate motor-housing phantom returns, finite range clamping.</li>
+            <li>Replaced a crashing hector_mapping package with a custom Bresenham ray-casting mapper maintaining a 320×320 log-odds grid at 5 cm resolution across the full warehouse.</li>
+            <li>Diagnosed three cascading failure modes — 0.9 m sensor blindspot, phantom obstacle false positives from motor reflections, and an oscillatory backward-force controller (RC3) — and systematically resolved each.</li>
+          </ul>
+          <div class="project-footer">
+            <span data-editable="proj-uav-footer">14.14 m diagonal mission through live obstacle field — sensors-only autonomy.</span>
+            <div class="project-links">
+              <a href="https://github.com/Svvipee/Hamza-Ouriour-Portfolio" target="_blank">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- SIMPLEX ──────────────────────────────────────────── -->
         <article class="project-card" data-tags="soft">
           <div class="project-chip-row">
             <div class="project-type">Space Software</div>
-            <div class="project-pill">Europa Clipper · EIS</div>
+            <div class="project-pill" data-editable="proj-simplex-pill">Europa Clipper · EIS</div>
           </div>
-          <h3 class="project-title">SIMPLEX Imaging Optimization Tool</h3>
-          <p class="project-subtitle">
+          <h3 class="project-title" data-editable="proj-simplex-title">SIMPLEX Imaging Optimization Tool</h3>
+          <p class="project-subtitle" data-editable="proj-simplex-sub">
             Mission-planning software that optimizes Europa Imaging System
             frames and picture sequences to balance coverage, resolution, and
             future close-up targeting opportunities.
@@ -1021,21 +678,22 @@
             <span>Image targeting strategy</span>
           </div>
           <div class="project-footer">
-            <span>Improved regional imaging utility for science & look-ahead.</span>
+            <span data-editable="proj-simplex-footer">Improved regional imaging utility for science &amp; look-ahead.</span>
             <div class="project-links">
               <a href="#" target="_blank">Summary</a>
             </div>
           </div>
         </article>
 
+        <!-- Mars Lander ──────────────────────────────────────── -->
         <article class="project-card" data-tags="mech soft">
           <div class="project-chip-row">
-            <div class="project-type">Systems & Robotics</div>
-            <div class="project-pill">Mars mission concept</div>
+            <div class="project-type">Systems &amp; Robotics</div>
+            <div class="project-pill" data-editable="proj-mars-pill">Mars mission concept</div>
           </div>
-          <h3 class="project-title">Mars Volcanism & Ice Lander/Rover Concept</h3>
-          <p class="project-subtitle">
-            L’SPACE mission architecture exploring Martian volcanic emissions,
+          <h3 class="project-title" data-editable="proj-mars-title">Mars Volcanism &amp; Ice Lander/Rover Concept</h3>
+          <p class="project-subtitle" data-editable="proj-mars-sub">
+            L'SPACE mission architecture exploring Martian volcanic emissions,
             water vapor, and subsurface ice using a robotic lander and rover
             equipped for geological sampling.
           </p>
@@ -1045,20 +703,21 @@
             <span>Environmental analysis</span>
           </div>
           <div class="project-footer">
-            <span>Linked atmospheric science to rover design decisions.</span>
+            <span data-editable="proj-mars-footer">Linked atmospheric science to rover design decisions.</span>
             <div class="project-links">
               <a href="srr_viewer_fixed.html" target="_blank">Mission SRR (PDF)</a>
             </div>
           </div>
         </article>
 
+        <!-- Robotics Nav ─────────────────────────────────────── -->
         <article class="project-card" data-tags="mech soft">
           <div class="project-chip-row">
             <div class="project-type">Robotics</div>
-            <div class="project-pill">Autonomy & ML</div>
+            <div class="project-pill" data-editable="proj-nav-pill">Autonomy &amp; ML</div>
           </div>
-          <h3 class="project-title">Autonomous Robotics Navigation Stack</h3>
-          <p class="project-subtitle">
+          <h3 class="project-title" data-editable="proj-nav-title">Autonomous Robotics Navigation Stack</h3>
+          <p class="project-subtitle" data-editable="proj-nav-sub">
             Software stack for small autonomous robots combining low-level
             control, sensor fusion, and ML-powered perception for real-time
             navigation.
@@ -1066,23 +725,24 @@
           <div class="project-meta">
             <span>Python · C++</span>
             <span>ROS / Embedded Linux</span>
-            <span>Computer vision & ML</span>
+            <span>Computer vision &amp; ML</span>
           </div>
           <div class="project-footer">
-            <span>Ensured reliable real-time execution on constrained hardware.</span>
+            <span data-editable="proj-nav-footer">Ensured reliable real-time execution on constrained hardware.</span>
             <div class="project-links">
               <a href="#" target="_blank">Overview</a>
             </div>
           </div>
         </article>
 
+        <!-- Thermo Visualizer ───────────────────────────────── -->
         <article class="project-card" data-tags="soft">
           <div class="project-chip-row">
             <div class="project-type">Software</div>
-            <div class="project-pill">Simulation tools</div>
+            <div class="project-pill" data-editable="proj-thermo-pill">Simulation tools</div>
           </div>
-          <h3 class="project-title">Thermo–Fluids Cycle Visualizer</h3>
-          <p class="project-subtitle">
+          <h3 class="project-title" data-editable="proj-thermo-title">Thermo–Fluids Cycle Visualizer</h3>
+          <p class="project-subtitle" data-editable="proj-thermo-sub">
             Interactive Python tool that plots Brayton/Diesel cycles, computes
             efficiencies, and lets users tweak parameters in real time for
             thermo/fluids courses and labs.
@@ -1093,20 +753,21 @@
             <span>Engineering education</span>
           </div>
           <div class="project-footer">
-            <span>Helped classmates debug cycle calculations much faster.</span>
+            <span data-editable="proj-thermo-footer">Helped classmates debug cycle calculations much faster.</span>
             <div class="project-links">
               <a href="thermo_demo_full.html" target="_blank">Demo</a>
             </div>
           </div>
         </article>
 
+        <!-- Torsion Rig ──────────────────────────────────────── -->
         <article class="project-card" data-tags="mech soft">
           <div class="project-chip-row">
             <div class="project-type">Controls &amp; Lab Automation</div>
-            <div class="project-pill">Experimental mechanics</div>
+            <div class="project-pill" data-editable="proj-torsion-pill">Experimental mechanics</div>
           </div>
-          <h3 class="project-title">Automated Torsion Test Rig</h3>
-          <p class="project-subtitle">
+          <h3 class="project-title" data-editable="proj-torsion-title">Automated Torsion Test Rig</h3>
+          <p class="project-subtitle" data-editable="proj-torsion-sub">
             Automated a lab torsion testing setup with microcontroller-based
             motor control and PC software for real-time torque–angle and
             stress–strain plotting.
@@ -1117,51 +778,40 @@
             <span>Live plotting UI</span>
           </div>
           <div class="project-footer">
-            <span>Cut manual data collection time by ~60%.</span>
+            <span data-editable="proj-torsion-footer">Cut manual data collection time by ~60%.</span>
             <div class="project-links">
               <a href="torsion_control.html#firmware" target="_blank">Firmware</a>
-              <a href="torsion_control.html#ui" target="_blank">Desktop UI</a>
+              <a href="torsion_control.html#ui"       target="_blank">Desktop UI</a>
             </div>
           </div>
         </article>
+
       </div>
     </section>
 
+    <!-- ── CONTACT ────────────────────────────────────────────── -->
     <section id="contact">
       <div class="section-label">Contact</div>
-      <h2 class="section-title">Let’s build something together</h2>
+      <h2 class="section-title" data-editable="contact-title">Let's build something together</h2>
 
       <div class="contact-grid">
         <div class="contact-text">
-          <p>
-            I’m open to internships, co-ops, and collaborations in mechanical
+          <p data-editable="contact-p1">
+            I'm open to internships, co-ops, and collaborations in mechanical
             engineering, robotics, space systems, and engineering-focused
             software tooling.
           </p>
           <div class="contact-highlight">
-            <span>What I bring:</span> experience across NASA mission work,
+            <span>What I bring:</span>
+            <span data-editable="contact-highlight"> experience across NASA mission work,
             robotics, and engineering software — plus a strong foundation in
-            mechanics, thermo/fluids, and numerical methods.
+            mechanics, thermo/fluids, and numerical methods.</span>
           </div>
           <div class="contact-list">
-            <div>
-              Email:
-              <a href="mailto:hamza.ouriour@gmail.com">
-                hamza.ouriour@gmail.com
-              </a>
-            </div>
-            <div>
-              Phone:
-              <a href="tel:+16174078157">
-                +1 (617) 407-8157
-              </a>
-            </div>
-            <div>
-              Location:
-              <span>Massachusetts, USA</span>
-            </div>
-            <div>
-              LinkedIn:
+            <div>Email: <a href="mailto:hamza.ouriour@gmail.com">hamza.ouriour@gmail.com</a></div>
+            <div>Phone: <a href="tel:+16174078157">+1 (617) 407-8157</a></div>
+            <div>Location: <span>Massachusetts, USA</span></div>
+            <div>LinkedIn:
               <a href="https://www.linkedin.com/in/hamza-ouriour-659123290/" target="_blank">
                 linkedin.com/in/hamza-ouriour-659123290
               </a>
@@ -1172,55 +822,58 @@
         <aside class="contact-card">
           <h3>Quick stats</h3>
           <div class="contact-row">
-            <span class="contact-tag">NASA: Europa Clipper & L’SPACE</span>
-            <span class="contact-tag">Robotics & autonomy experience</span>
+            <span class="contact-tag">NASA: Europa Clipper &amp; L'SPACE</span>
+            <span class="contact-tag">Robotics &amp; autonomy experience</span>
           </div>
           <div class="contact-row">
             <span class="contact-tag">GPA 3.75 · WIT</span>
             <span class="contact-tag">CSWA · SolidWorks certified</span>
           </div>
-          <p>
-            If you’d like a deeper walkthrough of any project or a copy of my
-            full résumé, feel free to reach out — I’m happy to dive into the
+          <p data-editable="contact-card-p">
+            If you'd like a deeper walkthrough of any project or a copy of my
+            full résumé, feel free to reach out — I'm happy to dive into the
             technical details.
           </p>
         </aside>
       </div>
     </section>
+
   </main>
 
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
   <footer>
     <span>&copy; <strong>2025</strong> Hamza Ouriour.</span>
-    <span>Built with HTML, CSS, and a bit of JavaScript.</span>
+    <span>
+      Built with HTML, CSS &amp; JavaScript.
+      <span id="admin-trigger" title=""></span>
+    </span>
   </footer>
 
+  <!-- ── SCRIPTS ──────────────────────────────────────────────── -->
+  <script src="admin.js"></script>
   <script>
-    const toggle = document.querySelector(".nav-toggle");
-    const links = document.querySelector(".nav-links");
+    /* ── NAV TOGGLE ─── */
+    const toggle = document.querySelector('.nav-toggle');
+    const links  = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => links.classList.toggle('mobile-open'));
 
-    toggle.addEventListener("click", () => {
-      links.classList.toggle("mobile-open");
-    });
+    /* ── PROJECT FILTER ─── */
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards  = document.querySelectorAll('.project-card');
 
-    const filterButtons = document.querySelectorAll(".filter-btn");
-    const projectCards = document.querySelectorAll(".project-card");
-
-    filterButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const filter = btn.getAttribute("data-filter");
-
-        filterButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        projectCards.forEach((card) => {
-          const tags = card.getAttribute("data-tags");
-          const shouldShow =
-            filter === "all" || tags.split(" ").includes(filter);
-
-          card.style.display = shouldShow ? "block" : "none";
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        projectCards.forEach(card => {
+          const tags = card.getAttribute('data-tags') || '';
+          const show = filter === 'all' || tags.split(' ').includes(filter);
+          card.style.display = show ? '' : 'none';
         });
       });
     });
   </script>
+
 </body>
 </html>
