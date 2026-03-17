@@ -5,875 +5,998 @@
   <title>Hamza Ouriour | Mechanical &amp; Software Engineer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    /* ── Variables ──────────────────────────────────────── */
     :root {
-      --bg:             #080808;
-      --bg-alt:         #101010;
-      --accent:         #ffffff;
-      --accent-soft:    rgba(255, 255, 255, 0.07);
-      --text:           #f0f0f0;
-      --muted:          #888888;
-      --card:           #111111;
-      --border:         #1e1e1e;
-      --radius-xl:      18px;
-      --shadow-soft:    0 20px 40px rgba(0, 0, 0, 0.6);
-      --transition-fast: 0.2s ease-out;
+      --bg:       #090909;
+      --s1:       #0e0e0e;   /* card surface */
+      --s2:       #141414;   /* hover surface */
+      --s3:       #1a1a1a;   /* elevated */
+      --t1:       #f5f5f5;   /* primary text */
+      --t2:       #a3a3a3;   /* body text */
+      --t3:       #525252;   /* muted / labels */
+      --t4:       #2e2e2e;   /* very muted */
+      --b1:       rgba(255,255,255,0.06);  /* border default */
+      --b2:       rgba(255,255,255,0.12);  /* border hover */
+      --b3:       rgba(255,255,255,0.22);  /* border active */
+      --r:        15px;
+      --r-lg:     22px;
+      --sh1:      0 4px 20px rgba(0,0,0,0.45);
+      --sh2:      0 12px 40px rgba(0,0,0,0.65);
+      --sh3:      0 24px 64px rgba(0,0,0,0.85);
+      --ease:     cubic-bezier(0.16, 1, 0.3, 1);
+      --fast:     0.18s ease;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── Reset ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Base ───────────────────────────────────────────── */
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #181818 0, var(--bg) 60%);
-      color: var(--text);
-      line-height: 1.6;
-      scroll-behavior: smooth;
+      background-color: var(--bg);
+      color: var(--t2);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
+
+    /* subtle dot-grid background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    header, main, footer { position: relative; z-index: 1; }
 
     a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
 
-    /* ── HEADER / NAV ───────────────────────────────────────── */
+    /* ── Scroll-reveal ──────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s var(--ease), transform 0.55s var(--ease); }
+    .reveal.revealed { opacity: 1; transform: none; }
+
+    /* ── HEADER ─────────────────────────────────────────── */
     header {
       position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(16px);
-      background: linear-gradient(to bottom, rgba(8,8,8,0.92), rgba(8,8,8,0.4), transparent);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: linear-gradient(to bottom, rgba(9,9,9,0.94) 0%, rgba(9,9,9,0.6) 70%, transparent);
+      border-bottom: 1px solid var(--b1);
+      transition: border-color var(--fast);
     }
+    header.is-scrolled { border-color: var(--b2); }
 
     .nav {
-      max-width: 1080px; margin: 0 auto;
-      padding: 0.75rem 1.25rem;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0.8rem 1.5rem;
       display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     }
 
-    .nav-left { display: flex; align-items: center; gap: 0.6rem; }
+    .nav-left { display: flex; align-items: center; gap: 0.7rem; }
 
     .logo-dot {
-      width: 32px; height: 32px; border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #ffffff, #555555);
-      box-shadow: 0 0 18px rgba(255,255,255,0.18);
-      flex-shrink: 0;
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      background: radial-gradient(circle at 32% 32%, #ffffff, #4a4a4a);
+      box-shadow: 0 0 16px rgba(255,255,255,0.16);
     }
 
-    .nav-title-main { font-weight: 600; font-size: 0.95rem; letter-spacing: 0.04em; }
-    .nav-title-sub  { font-size: 0.75rem; color: var(--muted); }
+    .nav-name { font-weight: 600; font-size: 0.9rem; color: var(--t1); letter-spacing: 0.02em; }
+    .nav-sub  { font-size: 0.7rem; color: var(--t3); }
 
-    .nav-links { display: flex; gap: 1.25rem; font-size: 0.85rem; }
-
-    .nav-links a { position: relative; padding-bottom: 0.1rem; }
-
+    .nav-links { display: flex; gap: 1.4rem; font-size: 0.82rem; color: var(--t3); }
+    .nav-links a { transition: color var(--fast); position: relative; padding-bottom: 2px; }
     .nav-links a::after {
-      content: ""; position: absolute; left: 0; bottom: 0;
-      width: 0; height: 2px; border-radius: 999px;
-      background: #ffffff;
-      transition: width var(--transition-fast);
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 1px; background: var(--t1);
+      transition: width var(--fast);
     }
+    .nav-links a:hover { color: var(--t1); }
     .nav-links a:hover::after { width: 100%; }
+    .nav-links a.is-active { color: var(--t1); }
+    .nav-links a.is-active::after { width: 100%; }
 
     .nav-cta {
-      font-size: 0.82rem; padding: 0.4rem 0.9rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.04);
-      box-shadow: 0 0 16px rgba(255,255,255,0.06);
-      transition: border-color var(--transition-fast), background var(--transition-fast);
+      font-size: 0.78rem; padding: 0.38rem 0.85rem; border-radius: 999px;
+      border: 1px solid var(--b2); color: var(--t2);
+      transition: border-color var(--fast), color var(--fast), background var(--fast);
     }
-    .nav-cta:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
+    .nav-cta:hover { border-color: var(--b3); color: var(--t1); background: rgba(255,255,255,0.04); }
 
     .nav-toggle {
       display: none; border: none; background: transparent;
-      color: var(--text); font-size: 1.3rem; cursor: pointer;
+      color: var(--t2); font-size: 1.2rem; cursor: pointer; padding: 0.2rem;
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 760px) {
       .nav-links, .nav-cta { display: none; }
       .nav-toggle { display: block; }
-      .nav-links.mobile-open {
-        display: flex; flex-direction: column; align-items: flex-end;
-        position: absolute; right: 1.25rem; top: 3.2rem;
-        padding: 0.75rem 1rem; border-radius: 16px;
+      .nav-links.is-open {
+        display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem;
+        position: absolute; right: 1.5rem; top: 3.4rem;
+        padding: 0.9rem 1.1rem; border-radius: var(--r-lg);
         background: rgba(10,10,10,0.98);
-        border: 1px solid rgba(255,255,255,0.07);
-        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--b2);
+        box-shadow: var(--sh3);
       }
     }
 
-    /* ── LAYOUT ─────────────────────────────────────────────── */
-    main { max-width: 1080px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
-    section { margin-top: 3.5rem; }
+    /* ── Layout ─────────────────────────────────────────── */
+    main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.5rem 5rem; }
+    section { margin-top: 4.5rem; }
 
-    .section-label {
-      font-size: 0.8rem; text-transform: uppercase;
-      letter-spacing: 0.18em; color: var(--muted); margin-bottom: 0.4rem;
+    .section-eyebrow {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--t3); margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.5rem;
     }
+    .section-eyebrow::before {
+      content: ''; display: block; width: 16px; height: 1px; background: var(--t4);
+    }
+    .section-title { font-size: 1.7rem; font-weight: 700; color: var(--t1); margin-bottom: 1.2rem; line-height: 1.2; }
 
-    .section-title { font-size: 1.7rem; font-weight: 650; margin-bottom: 1.1rem; }
-
-    /* ── HERO ───────────────────────────────────────────────── */
+    /* ── HERO ───────────────────────────────────────────── */
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
-      gap: 2.4rem; align-items: center; margin-top: 2.5rem;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: 2.5rem; align-items: center; margin-top: 3rem;
     }
-    @media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
 
-    .hero-tag {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.2rem 0.7rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(16,16,16,0.9);
-      font-size: 0.75rem; color: var(--muted); margin-bottom: 0.7rem;
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.22rem 0.75rem; border-radius: 999px;
+      border: 1px solid var(--b1); background: rgba(255,255,255,0.02);
+      font-size: 0.72rem; color: var(--t3); margin-bottom: 0.9rem;
     }
-    .hero-tag span {
-      font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 999px;
-      background: rgba(255,255,255,0.08); color: #bbbbbb;
-    }
-
-    .hero-title { font-size: clamp(2.2rem, 4vw, 2.7rem); font-weight: 700; margin-bottom: 0.9rem; }
-
-    .gradient-text {
-      background: linear-gradient(to right, #ffffff, #888888);
-      -webkit-background-clip: text; color: transparent;
+    .hero-eyebrow-badge {
+      font-size: 0.62rem; padding: 0.08rem 0.38rem; border-radius: 999px;
+      background: rgba(255,255,255,0.07); color: var(--t2);
     }
 
-    .hero-subtitle { color: var(--muted); font-size: 0.95rem; max-width: 34rem; margin-bottom: 1.2rem; }
+    .hero-h1 {
+      font-size: clamp(2.1rem, 4.5vw, 2.75rem); font-weight: 800;
+      color: var(--t1); margin-bottom: 1rem; line-height: 1.15; letter-spacing: -0.02em;
+    }
+    .hero-h1 .shine {
+      background: linear-gradient(100deg, #ffffff 0%, #888888 55%, #ffffff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      animation: shine 6s linear infinite;
+    }
+    @keyframes shine { to { background-position: 200% center; } }
 
-    .hero-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
+    .hero-sub {
+      font-size: 0.94rem; color: var(--t2); max-width: 34rem;
+      margin-bottom: 1.3rem; line-height: 1.7;
+    }
 
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 0.42rem; margin-bottom: 1.5rem; }
     .badge {
-      font-size: 0.72rem; padding: 0.28rem 0.6rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(16,16,16,0.9); color: var(--muted);
+      font-size: 0.7rem; padding: 0.26rem 0.6rem; border-radius: 999px;
+      border: 1px solid var(--b1); background: rgba(255,255,255,0.02); color: var(--t3);
+      transition: border-color var(--fast), color var(--fast);
     }
+    .badge:hover { border-color: var(--b2); color: var(--t2); }
 
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; }
 
     .btn-primary {
-      border-radius: 999px; padding: 0.5rem 1.1rem; font-size: 0.85rem;
-      border: none; cursor: pointer;
-      background: #ffffff; color: #080808;
-      box-shadow: 0 10px 28px rgba(255,255,255,0.18);
-      font-weight: 600;
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.52rem 1.15rem; border-radius: 999px; border: none; cursor: pointer;
+      background: #ffffff; color: #090909;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.01em;
+      box-shadow: 0 8px 28px rgba(255,255,255,0.15);
+      transition: opacity var(--fast), box-shadow var(--fast), transform var(--fast);
     }
-    .btn-primary:hover {
-      transform: translateY(-1px); filter: brightness(0.92);
-      box-shadow: 0 16px 36px rgba(255,255,255,0.25);
-    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 12px 36px rgba(255,255,255,0.22); }
 
     .btn-ghost {
-      border-radius: 999px; padding: 0.45rem 1rem; font-size: 0.83rem;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(16,16,16,0.85); cursor: pointer;
-      display: inline-flex; align-items: center; gap: 0.3rem; color: var(--muted);
-      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.48rem 1rem; border-radius: 999px;
+      border: 1px solid var(--b2); background: transparent;
+      font-size: 0.8rem; color: var(--t3); cursor: pointer;
+      transition: border-color var(--fast), color var(--fast), background var(--fast), transform var(--fast);
     }
-    .btn-ghost:hover {
-      background: rgba(20,20,20,1); border-color: rgba(255,255,255,0.3);
-      color: var(--text); transform: translateY(-1px);
-    }
-    .btn-ghost span.icon { font-size: 1rem; }
+    .btn-ghost:hover { border-color: var(--b3); color: var(--t1); background: rgba(255,255,255,0.04); transform: translateY(-1px); }
 
-    /* ── HERO PANEL ─────────────────────────────────────────── */
+    /* ── Hero panel ─────────────────────────────────────── */
     .hero-panel {
-      border-radius: 24px; padding: 1.1rem 1.1rem 1.2rem;
-      background: radial-gradient(circle at top left, #1a1a1a 0, #080808 60%);
-      border: 1px solid rgba(255,255,255,0.07);
-      box-shadow: var(--shadow-soft);
+      border-radius: var(--r-lg); padding: 1.2rem;
+      background: radial-gradient(circle at 15% 15%, #191919 0%, #0a0a0a 65%);
+      border: 1px solid var(--b1); box-shadow: var(--sh2);
       position: relative; overflow: hidden;
+      animation: floatPanel 7s ease-in-out infinite;
     }
-    .hero-panel-glow {
-      position: absolute; inset: -40%;
+    @keyframes floatPanel { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-7px); } }
+
+    .panel-glow {
+      position: absolute; inset: -60%;
       background:
-        radial-gradient(circle at 10%   0, rgba(255,255,255,0.03) 0, transparent 55%),
-        radial-gradient(circle at 110% 40%, rgba(255,255,255,0.05) 0, transparent 55%);
+        radial-gradient(circle at 20%   5%, rgba(255,255,255,0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80%  80%, rgba(255,255,255,0.04) 0%, transparent 50%);
       pointer-events: none;
     }
-    .hero-panel-inner { position: relative; z-index: 1; }
-    .hero-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .panel-inner { position: relative; z-index: 1; }
 
-    .hero-pill {
-      font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 999px;
-      background: rgba(10,10,10,0.9); border: 1px solid rgba(255,255,255,0.08);
-      color: var(--muted);
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }
+    .panel-chip {
+      font-size: 0.63rem; padding: 0.18rem 0.55rem; border-radius: 999px;
+      border: 1px solid var(--b1); background: rgba(255,255,255,0.02); color: var(--t3);
     }
-    .hero-status-dot {
-      width: 9px; height: 9px; border-radius: 999px;
-      background: #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    .panel-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
 
-    .hero-mesh {
-      border-radius: 18px; border: 1px solid rgba(255,255,255,0.07);
+    .panel-visual {
+      border-radius: var(--r); border: 1px solid var(--b1);
       background:
-        radial-gradient(circle at 20% 20%, #2a2a2a 0, transparent 55%),
-        radial-gradient(circle at 80% 80%, #1a1a1a 0, transparent 55%),
-        radial-gradient(circle at 10% 80%, #333333 0, transparent 55%);
-      padding: 0.85rem; margin-bottom: 1rem; position: relative; overflow: hidden;
+        radial-gradient(circle at 25% 25%, #242424 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, #1c1c1c 0%, transparent 50%),
+        #0f0f0f;
+      padding: 0.9rem; margin-bottom: 0.9rem; position: relative; overflow: hidden;
     }
-    .mesh-grid {
+    .panel-grid {
       position: absolute; inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 24px 24px; pointer-events: none;
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 22px 22px; pointer-events: none;
     }
-    .mesh-content {
+    .panel-grid-inner {
       position: relative; z-index: 1;
       display: grid; grid-template-columns: 1.3fr 1fr; gap: 0.6rem; align-items: center;
     }
-    @media (max-width: 480px) { .mesh-content { grid-template-columns: 1fr; } }
+    .panel-vis-title { font-size: 0.86rem; font-weight: 600; color: var(--t1); margin-bottom: 0.08rem; }
+    .panel-vis-sub   { font-size: 0.71rem; color: var(--t2); margin-bottom: 0.4rem; }
+    .panel-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; font-size: 0.63rem; }
+    .panel-tag {
+      padding: 0.1rem 0.4rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.03); color: var(--t3);
+    }
+    .panel-bar {
+      height: 5px; border-radius: 999px;
+      background: linear-gradient(to right, #2a2a2a, #888, #f0f0f0);
+      margin-bottom: 0.28rem;
+    }
+    .panel-bar-label { font-size: 0.58rem; color: var(--t3); text-align: right; }
+    .panel-footer { font-size: 0.72rem; color: var(--t3); display: flex; justify-content: space-between; }
+    .panel-footer strong { color: var(--t2); }
 
-    .mesh-main-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.1rem; }
-    .mesh-main-sub   { font-size: 0.75rem; color: #cccccc; margin-bottom: 0.4rem; }
+    /* ── ABOUT ──────────────────────────────────────────── */
+    .about-layout { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 2.2rem; }
+    @media (max-width: 900px) { .about-layout { grid-template-columns: 1fr; } }
 
-    .mesh-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; font-size: 0.68rem; }
-    .mesh-tag {
-      padding: 0.1rem 0.45rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(10,10,10,0.85); color: #cccccc;
+    .about-body { font-size: 0.91rem; color: var(--t2); }
+    .about-body p + p { margin-top: 0.65rem; }
+
+    .skill-chips { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 0.85rem; }
+    .chip {
+      font-size: 0.68rem; padding: 0.22rem 0.58rem; border-radius: 999px;
+      border: 1px solid var(--b1); background: rgba(255,255,255,0.02); color: var(--t3);
+      transition: border-color var(--fast), color var(--fast);
+    }
+    .chip:hover { border-color: var(--b2); color: var(--t2); }
+
+    .snapshot-card {
+      background: var(--s1); border: 1px solid var(--b1); border-radius: var(--r-lg);
+      padding: 1rem 1.1rem; box-shadow: var(--sh1); font-size: 0.78rem;
+      transition: border-color var(--fast);
+    }
+    .snapshot-card:hover { border-color: var(--b2); }
+    .snapshot-card h3 { font-size: 0.82rem; color: var(--t1); margin-bottom: 0.5rem; }
+    .snapshot-cols { display: flex; gap: 1rem; }
+    .snapshot-col { flex: 1; }
+    .snapshot-col ul { list-style: none; }
+    .snapshot-col li { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.3rem; color: var(--t3); }
+    .snap-dot {
+      display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--t4); flex-shrink: 0; margin-top: 2px;
     }
 
-    .mesh-meter {
-      border-radius: 999px; background: rgba(10,10,10,0.8);
-      padding: 0.1rem; border: 1px solid rgba(255,255,255,0.07);
+    /* ── EXPERIENCE ─────────────────────────────────────── */
+    .exp-list { display: flex; flex-direction: column; gap: 1px; }
+
+    .exp-item {
+      display: grid; grid-template-columns: 200px 1fr; gap: 2rem;
+      padding: 1.5rem 0; border-top: 1px solid var(--b1);
+      transition: border-color var(--fast);
     }
-    .mesh-meter > div {
-      height: 6px; border-radius: 999px;
-      background: linear-gradient(to right, #2a2a2a, #888888, #ffffff);
-      width: 88%;
-    }
-    .mesh-legend { font-size: 0.6rem; color: #cccccc; text-align: right; margin-top: 0.25rem; }
-
-    .hero-panel-footer { font-size: 0.75rem; color: var(--muted); }
-    .hero-panel-footer strong { color: var(--text); }
-
-    /* ── ABOUT ──────────────────────────────────────────────── */
-    .about-grid {
-      display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr); gap: 2rem;
-    }
-    @media (max-width: 900px) { .about-grid { grid-template-columns: minmax(0, 1fr); } }
-
-    .about-text { font-size: 0.92rem; color: var(--muted); }
-    .about-text p + p { margin-top: 0.6rem; }
-
-    .pill-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
-    .pill {
-      font-size: 0.7rem; padding: 0.24rem 0.6rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.09); background: rgba(14,14,14,0.9);
+    .exp-item:last-child { border-bottom: 1px solid var(--b1); }
+    .exp-item:hover { border-color: var(--b2); }
+    @media (max-width: 760px) {
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
     }
 
-    .about-card {
-      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
-      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
-      box-shadow: var(--shadow-soft); font-size: 0.8rem;
-    }
-    .about-card h3 { font-size: 0.9rem; margin-bottom: 0.4rem; }
-    .about-card-row { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.4rem; }
-    .about-card-col ul { list-style: none; }
-    .about-card-col li { margin-bottom: 0.28rem; color: var(--muted); }
+    .exp-meta-col {}
+    .exp-date { font-size: 0.68rem; color: var(--t3); letter-spacing: 0.04em; margin-bottom: 0.3rem; }
+    .exp-org  { font-size: 0.78rem; color: var(--t2); font-weight: 600; }
 
-    .dot {
-      display: inline-block; width: 6px; height: 6px; border-radius: 999px;
-      margin-right: 0.3rem; background: #888888;
-    }
+    .exp-content-col {}
+    .exp-role { font-size: 0.95rem; font-weight: 700; color: var(--t1); margin-bottom: 0.5rem; }
+    .exp-bullets { font-size: 0.83rem; color: var(--t3); padding-left: 1rem; }
+    .exp-bullets li { margin-bottom: 0.32rem; line-height: 1.6; }
 
-    /* ── EXPERIENCE ─────────────────────────────────────────── */
-    .exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
-
-    .exp-card {
-      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
-      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
-      box-shadow: var(--shadow-soft); font-size: 0.82rem;
-      transition: border-color var(--transition-fast), transform var(--transition-fast);
-    }
-    .exp-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
-
-    .exp-role  { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.1rem; }
-    .exp-org   { font-size: 0.82rem; color: #cccccc; margin-bottom: 0.1rem; }
-    .exp-meta  { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
-    .exp-card ul { padding-left: 1rem; color: var(--muted); }
-    .exp-card li { margin-bottom: 0.3rem; }
-
-    /* ── PROJECTS ───────────────────────────────────────────── */
+    /* ── PROJECTS ───────────────────────────────────────── */
     .projects-header {
-      display: flex; flex-wrap: wrap; align-items: baseline;
-      justify-content: space-between; gap: 0.4rem; margin-bottom: 1rem;
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 0.5rem; margin-bottom: 1.3rem;
     }
+    .projects-header .section-title { margin-bottom: 0; }
 
-    .projects-filter {
-      display: inline-flex; border-radius: 999px; padding: 0.12rem;
-      border: 1px solid rgba(255,255,255,0.09);
-      background: rgba(10,10,10,0.95); font-size: 0.72rem;
+    .filter-bar {
+      display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px;
+      border: 1px solid var(--b1); background: rgba(255,255,255,0.02); font-size: 0.7rem;
     }
     .filter-btn {
-      border: none; border-radius: 999px; padding: 0.2rem 0.7rem;
-      cursor: pointer; background: transparent; color: var(--muted);
-      transition: background var(--transition-fast), color var(--transition-fast);
+      border: none; border-radius: 999px; padding: 0.22rem 0.75rem;
+      cursor: pointer; background: transparent; color: var(--t3);
+      transition: background var(--fast), color var(--fast);
     }
-    .filter-btn.active { background: rgba(255,255,255,0.1); color: #eeeeee; }
+    .filter-btn.active { background: rgba(255,255,255,0.09); color: var(--t1); }
 
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; }
 
     .project-card {
-      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
-      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-      position: relative; overflow: hidden; cursor: default;
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-        border-color var(--transition-fast), background var(--transition-fast);
+      background: var(--s1); border: 1px solid var(--b1); border-radius: var(--r-lg);
+      padding: 1rem 1.1rem; box-shadow: var(--sh1); position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 0;
+      transition: transform var(--fast), border-color var(--fast), box-shadow var(--fast), background var(--fast);
+      cursor: default;
     }
     .project-card:hover {
-      transform: translateY(-3px); box-shadow: 0 24px 45px rgba(0,0,0,0.85);
-      border-color: rgba(255,255,255,0.22); background: rgba(16,16,16,0.98);
+      transform: translateY(-4px); border-color: var(--b2);
+      box-shadow: var(--sh2); background: var(--s2);
+    }
+    .project-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 60%);
     }
 
     .project-chip-row {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.55rem; position: relative; z-index: 1;
     }
     .project-type {
-      font-size: 0.65rem; padding: 0.14rem 0.5rem; border-radius: 999px;
-      background: rgba(10,10,10,0.95); border: 1px solid rgba(255,255,255,0.09);
-      color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 0.13rem 0.5rem; border-radius: 999px;
+      border: 1px solid var(--b1); color: var(--t3); background: rgba(255,255,255,0.02);
     }
-    .project-pill { font-size: 0.65rem; color: #bbbbbb; }
+    .project-pill { font-size: 0.63rem; color: var(--t3); }
 
-    .project-title   { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .project-subtitle { font-size: 0.76rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .project-title    { font-size: 0.95rem; font-weight: 700; color: var(--t1); margin-bottom: 0.28rem; position: relative; z-index: 1; }
+    .project-subtitle { font-size: 0.76rem; color: var(--t3); line-height: 1.6; margin-bottom: 0.55rem; position: relative; z-index: 1; }
 
-    .project-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.7rem; margin-bottom: 0.5rem; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 0.32rem; margin-bottom: 0.65rem; position: relative; z-index: 1; }
     .project-meta span {
-      padding: 0.16rem 0.4rem; border-radius: 999px;
-      background: rgba(10,10,10,0.95); border: 1px solid rgba(255,255,255,0.09); color: var(--muted);
+      font-size: 0.64rem; padding: 0.12rem 0.4rem; border-radius: 999px;
+      border: 1px solid var(--b1); color: var(--t3); background: rgba(255,255,255,0.02);
     }
-
-    .project-bullets {
-      padding-left: 1rem; color: var(--muted); font-size: 0.72rem;
-      margin-bottom: 0.5rem;
-    }
-    .project-bullets li { margin-bottom: 0.24rem; }
-
-    .project-challenges {
-      margin-bottom: 0.5rem; font-size: 0.72rem;
-    }
-    .project-challenges-label {
-      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
-      color: #666; margin-bottom: 0.3rem;
-    }
-    .project-challenges ul { padding-left: 1rem; color: var(--muted); }
-    .project-challenges li { margin-bottom: 0.2rem; }
 
     .project-footer {
       display: flex; justify-content: space-between; align-items: center;
-      margin-top: 0.3rem; font-size: 0.72rem; color: var(--muted);
+      margin-top: auto; padding-top: 0.55rem;
+      border-top: 1px solid var(--b1); position: relative; z-index: 1;
+      font-size: 0.7rem;
     }
-    .project-links { display: flex; gap: 0.4rem; }
+    .project-links { display: flex; gap: 0.35rem; }
     .project-links a {
-      font-size: 0.72rem; padding: 0.16rem 0.42rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1); background: rgba(10,10,10,0.95);
-      transition: background var(--transition-fast), color var(--transition-fast),
-        border-color var(--transition-fast), transform var(--transition-fast);
+      font-size: 0.67rem; padding: 0.15rem 0.45rem; border-radius: 999px;
+      border: 1px solid var(--b1); color: var(--t3);
+      transition: border-color var(--fast), color var(--fast), background var(--fast);
     }
-    .project-links a:hover {
-      background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3);
-      color: #e0e0e0; transform: translateY(-1px);
+    .project-links a:hover { border-color: var(--b2); color: var(--t1); background: rgba(255,255,255,0.05); }
+
+    /* ── CONTACT ────────────────────────────────────────── */
+    .contact-layout { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 2rem; align-items: start; }
+    @media (max-width: 900px) { .contact-layout { grid-template-columns: 1fr; } }
+
+    .contact-body { font-size: 0.9rem; color: var(--t2); }
+    .contact-body p { margin-bottom: 0.7rem; }
+
+    .contact-callout {
+      padding: 0.7rem 0.9rem; border-radius: var(--r);
+      border: 1px dashed var(--b2); background: rgba(255,255,255,0.018);
+      font-size: 0.8rem; color: var(--t3); margin-bottom: 1.1rem;
     }
+    .contact-callout strong { color: var(--t2); }
 
-    /* ── CONTACT ────────────────────────────────────────────── */
-    .contact-grid {
-      display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
-      gap: 1.8rem; align-items: start;
-    }
-    @media (max-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } }
-
-    .contact-text { font-size: 0.9rem; color: var(--muted); }
-
-    .contact-highlight {
-      margin-top: 0.6rem; padding: 0.6rem 0.7rem;
-      border-radius: var(--radius-xl);
-      border: 1px dashed rgba(255,255,255,0.11);
-      background: rgba(12,12,12,0.95); font-size: 0.8rem;
-    }
-    .contact-highlight span { font-weight: 500; color: #e0e0e0; }
-
-    .contact-list { margin-top: 0.7rem; font-size: 0.85rem; }
-    .contact-list div { margin-bottom: 0.2rem; }
-    .contact-list a { color: #cccccc; transition: color var(--transition-fast); }
-    .contact-list a:hover { color: #ffffff; }
+    .contact-links { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.84rem; }
+    .contact-links a { color: var(--t2); transition: color var(--fast); }
+    .contact-links a:hover { color: var(--t1); }
+    .contact-links span { color: var(--t3); font-size: 0.72rem; margin-right: 0.4rem; }
 
     .contact-card {
-      border-radius: var(--radius-xl); background: rgba(12,12,12,0.96);
-      border: 1px solid var(--border); padding: 0.9rem 0.95rem;
-      box-shadow: var(--shadow-soft); font-size: 0.8rem;
+      background: var(--s1); border: 1px solid var(--b1); border-radius: var(--r-lg);
+      padding: 1rem 1.1rem; box-shadow: var(--sh1); font-size: 0.78rem;
+      transition: border-color var(--fast);
     }
-    .contact-card h3 { font-size: 0.9rem; margin-bottom: 0.45rem; }
-
-    .contact-row { display: flex; justify-content: space-between; gap: 0.4rem; margin-bottom: 0.4rem; }
-    .contact-tag {
-      font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.09);
-      background: rgba(12,12,12,0.96); color: var(--muted);
+    .contact-card:hover { border-color: var(--b2); }
+    .contact-card h3 { font-size: 0.82rem; color: var(--t1); margin-bottom: 0.7rem; }
+    .contact-stat-row { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-bottom: 0.38rem; }
+    .contact-stat {
+      font-size: 0.67rem; padding: 0.18rem 0.5rem; border-radius: 999px;
+      border: 1px solid var(--b1); color: var(--t3);
     }
+    .contact-card p { color: var(--t3); font-size: 0.77rem; line-height: 1.6; margin-top: 0.7rem; }
 
-    /* ── FOOTER ─────────────────────────────────────────────── */
+    /* ── FOOTER ─────────────────────────────────────────── */
     footer {
-      max-width: 1080px; margin: 0 auto; padding: 1.5rem 1.25rem 2rem;
-      font-size: 0.75rem; color: var(--muted);
-      display: flex; justify-content: space-between; gap: 0.5rem;
-      border-top: 1px solid rgba(255,255,255,0.07);
+      max-width: 1100px; margin: 0 auto; padding: 1.8rem 1.5rem 2.5rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+      border-top: 1px solid var(--b1); font-size: 0.72rem; color: var(--t3);
+      position: relative; z-index: 1;
     }
-    footer span strong { color: #e0e0e0; }
-    @media (max-width: 640px) { footer { flex-direction: column; } }
+    footer strong { color: var(--t2); }
+    @media (max-width: 640px) { footer { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
 <body>
 
-  <!-- ── HEADER ─────────────────────────────────────────────── -->
-  <header>
-    <nav class="nav">
-      <div class="nav-left">
-        <div class="logo-dot"></div>
-        <div>
-          <div class="nav-title-main">Hamza Ouriour</div>
-          <div class="nav-title-sub">Mechanical &amp; Software Engineering Student</div>
-        </div>
-      </div>
-      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <a href="#contact" class="nav-cta">Let's talk</a>
-    </nav>
-  </header>
-
-  <main>
-
-    <!-- ── HERO ───────────────────────────────────────────────── -->
-    <section id="top" class="hero">
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header id="site-header">
+  <nav class="nav">
+    <div class="nav-left">
+      <div class="logo-dot"></div>
       <div>
-        <div class="hero-tag">
-          Multidisciplinary Engineer
-          <span>Mech × Software</span>
-        </div>
-        <h1 class="hero-title" data-editable="hero-title">
-          I build <span class="gradient-text">machines that think</span>
-          and software that flies, roves, and learns.
-        </h1>
-        <p class="hero-subtitle" data-editable="hero-subtitle">
-          I'm Hamza, a Mechanical &amp; Software Engineering student at Wentworth
-          Institute of Technology (GPA 3.75), with experience on NASA's
-          Europa Clipper imaging optimization, Mars mission concept studies,
-          and autonomous robotics systems.
-        </p>
-        <div class="hero-badges">
-          <div class="badge">NASA Europa Clipper · EIS Optimization</div>
-          <div class="badge">NASA L'SPACE · Mars Rover Concept</div>
-          <div class="badge">Python · C++ · ROS · MATLAB</div>
-          <div class="badge">CAD · FEA · CFD · SolidWorks (CSWA)</div>
-        </div>
-        <div class="hero-actions">
-          <button class="btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
-            View projects
-          </button>
-          <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-            <span class="icon">✉️</span>
-            Contact me
-          </button>
-        </div>
+        <div class="nav-name" data-editable="nav-name">Hamza Ouriour</div>
+        <div class="nav-sub"  data-editable="nav-sub">Mechanical &amp; Software Engineering Student</div>
       </div>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu">☰</button>
+    <div class="nav-links" id="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Let's talk</a>
+  </nav>
+</header>
 
-      <aside class="hero-panel" aria-hidden="true">
-        <div class="hero-panel-glow"></div>
-        <div class="hero-panel-inner">
-          <div class="hero-panel-header">
-            <div class="hero-pill">Mission tool · Europa Clipper</div>
-            <div class="hero-status-dot"></div>
-          </div>
-          <div class="hero-mesh">
-            <div class="mesh-grid"></div>
-            <div class="mesh-content">
-              <div>
-                <div class="mesh-main-title">SIMPLEX Imaging Planner</div>
-                <div class="mesh-main-sub">
-                  Optimizing Europa Imaging System frames for science &amp; look-ahead.
-                </div>
-                <div class="mesh-tags">
-                  <span class="mesh-tag">Europa Imaging System (EIS)</span>
-                  <span class="mesh-tag">Frame optimization</span>
-                  <span class="mesh-tag">Python tooling</span>
-                </div>
-              </div>
-              <div>
-                <div class="mesh-meter"><div></div></div>
-                <div class="mesh-legend">Higher coverage · Improved close-up targeting</div>
+<main>
+
+  <!-- ── HERO ───────────────────────────────────────────────── -->
+  <section id="top" class="hero">
+    <div>
+      <div class="hero-eyebrow" data-editable="hero-eyebrow-label">
+        Multidisciplinary Engineer
+        <span class="hero-eyebrow-badge">Mech × Software</span>
+      </div>
+      <h1 class="hero-h1" data-editable="hero-h1">
+        I build <span class="shine">machines that think</span>
+        and software that flies, roves, and learns.
+      </h1>
+      <p class="hero-sub" data-editable="hero-sub">
+        I'm Hamza, a Mechanical &amp; Software Engineering student at Wentworth
+        Institute of Technology (GPA 3.75), with experience on NASA's
+        Europa Clipper imaging optimization, Mars mission concept studies,
+        and autonomous robotics systems.
+      </p>
+      <div class="hero-badges" data-editable="hero-badges">
+        <span class="badge">NASA Europa Clipper · EIS Optimization</span>
+        <span class="badge">NASA L'SPACE · Mars Rover Concept</span>
+        <span class="badge">Python · C++ · ROS · MATLAB</span>
+        <span class="badge">CAD · FEA · CFD · SolidWorks (CSWA)</span>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+          View projects
+        </button>
+        <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          ✉ Contact me
+        </button>
+      </div>
+    </div>
+
+    <aside class="hero-panel" aria-hidden="true">
+      <div class="panel-glow"></div>
+      <div class="panel-inner">
+        <div class="panel-header">
+          <span class="panel-chip" data-editable="panel-chip">Mission tool · Europa Clipper</span>
+          <div class="panel-dot"></div>
+        </div>
+        <div class="panel-visual">
+          <div class="panel-grid"></div>
+          <div class="panel-grid-inner">
+            <div>
+              <div class="panel-vis-title" data-editable="panel-vis-title">SIMPLEX Imaging Planner</div>
+              <div class="panel-vis-sub"   data-editable="panel-vis-sub">Optimizing Europa Imaging System frames for science &amp; look-ahead.</div>
+              <div class="panel-tags">
+                <span class="panel-tag">EIS</span>
+                <span class="panel-tag">Frame optimization</span>
+                <span class="panel-tag">Python tooling</span>
               </div>
             </div>
+            <div>
+              <div class="panel-bar"></div>
+              <div class="panel-bar-label">Coverage · Targeting</div>
+            </div>
           </div>
-          <div class="hero-panel-footer">
-            <div><strong>Focus:</strong> Space systems, robotics, &amp; tools</div>
-            <div>Code · CAD · Mission analysis</div>
+        </div>
+        <div class="panel-footer">
+          <div data-editable="panel-footer-l"><strong>Focus:</strong> Space · Robotics · Tools</div>
+          <div data-editable="panel-footer-r">Code · CAD · Mission analysis</div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ── ABOUT ──────────────────────────────────────────────── -->
+  <section id="about" class="reveal">
+    <div class="section-eyebrow">About</div>
+    <h2 class="section-title" data-editable="about-title">Bridging mechanical systems and intelligent software</h2>
+    <div class="about-layout">
+      <div class="about-body">
+        <p data-editable="about-p1">
+          I'm studying Mechanical &amp; Software Engineering at Wentworth
+          Institute of Technology, where I combine solid fundamentals in
+          physics and mechanics with modern software and controls.
+        </p>
+        <p data-editable="about-p2">
+          Professionally, I've contributed to NASA's Europa Clipper mission
+          through EIS imaging optimization, led systems engineering work in
+          NASA's L'SPACE academy on Mars robotic lander/rover concepts, and
+          developed robotics software for autonomous platforms at Starship Robotics.
+        </p>
+        <p data-editable="about-p3">
+          I like projects where I own the pipeline end-to-end: CAD and FEA,
+          mission or system analysis, embedded/desktop tools, and the
+          software that glues hardware, data, and operators together.
+        </p>
+        <div class="skill-chips" data-editable="about-chips">
+          <span class="chip">Siemens NX · SolidWorks (CSWA)</span>
+          <span class="chip">Finite Element Analysis (FEA)</span>
+          <span class="chip">Computational Fluid Dynamics (CFD)</span>
+          <span class="chip">Python · C++ · Java · JavaScript</span>
+          <span class="chip">ROS · Embedded Linux · SQL</span>
+          <span class="chip">MATLAB · NumPy · Matplotlib</span>
+        </div>
+      </div>
+
+      <aside class="snapshot-card">
+        <h3>Snapshot</h3>
+        <div class="snapshot-cols">
+          <div class="snapshot-col">
+            <ul data-editable="snap-left">
+              <li><span class="snap-dot"></span>NASA Europa Clipper ICONS Intern</li>
+              <li><span class="snap-dot"></span>L'SPACE MCA Lead Systems Engineer</li>
+              <li><span class="snap-dot"></span>Robotics Engineer &amp; Data Scientist</li>
+              <li><span class="snap-dot"></span>Mech &amp; Software Eng @ WIT</li>
+            </ul>
+          </div>
+          <div class="snapshot-col">
+            <ul data-editable="snap-right">
+              <li><span class="snap-dot"></span>GPA: 3.75</li>
+              <li><span class="snap-dot"></span>SolidWorks Certified (CSWA)</li>
+              <li><span class="snap-dot"></span>Space &amp; robotics focus</li>
+              <li><span class="snap-dot"></span>Hands-on lab &amp; coding</li>
+            </ul>
           </div>
         </div>
       </aside>
-    </section>
+    </div>
+  </section>
 
-    <!-- ── ABOUT ──────────────────────────────────────────────── -->
-    <section id="about">
-      <div class="section-label">About</div>
-      <h2 class="section-title" data-editable="about-title">Bridging mechanical systems and intelligent software</h2>
-      <div class="about-grid">
-        <div class="about-text">
-          <p data-editable="about-p1">
-            I'm studying Mechanical &amp; Software Engineering at Wentworth
-            Institute of Technology, where I combine solid fundamentals in
-            physics and mechanics with modern software and controls.
-          </p>
-          <p data-editable="about-p2">
-            Professionally, I've contributed to NASA's Europa Clipper mission
-            through EIS imaging optimization, led systems engineering work in
-            NASA's L'SPACE academy on Mars robotic lander/rover concepts, and
-            developed robotics software for autonomous platforms at Starship
-            Robotics.
-          </p>
-          <p data-editable="about-p3">
-            I like projects where I own the pipeline end-to-end: CAD and FEA,
-            mission or system analysis, embedded/desktop tools, and the
-            software that glues hardware, data, and operators together.
-          </p>
-          <div class="pill-row">
-            <span class="pill">Siemens NX · SolidWorks (CSWA)</span>
-            <span class="pill">Finite Element Analysis (FEA)</span>
-            <span class="pill">Computational Fluid Dynamics (CFD)</span>
-            <span class="pill">Python · C++ · Java · JavaScript</span>
-            <span class="pill">ROS · Embedded Linux · SQL</span>
-          </div>
-        </div>
+  <!-- ── EXPERIENCE ─────────────────────────────────────────── -->
+  <section id="experience" class="reveal">
+    <div class="section-eyebrow">Experience</div>
+    <h2 class="section-title" data-editable="exp-title">Recent roles &amp; mission work</h2>
 
-        <aside class="about-card">
-          <h3>Snapshot</h3>
-          <div class="about-card-row">
-            <div class="about-card-col">
-              <ul data-editable="about-snap-left">
-                <li><span class="dot"></span>NASA Europa Clipper ICONS Intern</li>
-                <li><span class="dot"></span>L'SPACE MCA Lead Systems Engineer</li>
-                <li><span class="dot"></span>Robotics Engineer &amp; Data Scientist</li>
-                <li><span class="dot"></span>Mechanical &amp; Software Eng @ WIT</li>
-              </ul>
-            </div>
-            <div class="about-card-col">
-              <ul data-editable="about-snap-right">
-                <li><span class="dot"></span>GPA: 3.75</li>
-                <li><span class="dot"></span>Certified SolidWorks Associate (CSWA)</li>
-                <li><span class="dot"></span>Space &amp; robotics focus</li>
-                <li><span class="dot"></span>Hands-on lab &amp; coding experience</li>
-              </ul>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
+    <div class="exp-list">
 
-    <!-- ── EXPERIENCE ─────────────────────────────────────────── -->
-    <section id="experience">
-      <div class="section-label">Experience</div>
-      <h2 class="section-title" data-editable="exp-title">Recent roles &amp; mission work</h2>
-
-      <div class="exp-grid">
-        <article class="exp-card">
-          <div class="exp-role" data-editable="exp-1-role">ICONS Intern · EIS Optimization Engineer · Software Developer</div>
+      <div class="exp-item">
+        <div class="exp-meta-col">
+          <div class="exp-date" data-editable="exp-1-date">Jun 2024 – Sep 2024</div>
           <div class="exp-org"  data-editable="exp-1-org">NASA · Europa Clipper</div>
-          <div class="exp-meta" data-editable="exp-1-meta">Jun 2024 – Sep 2024 · Remote / MA</div>
-          <ul data-editable="exp-1-bullets">
+        </div>
+        <div class="exp-content-col">
+          <div class="exp-role" data-editable="exp-1-role">ICONS Intern · EIS Optimization Engineer · Software Developer</div>
+          <ul class="exp-bullets" data-editable="exp-1-bullets">
             <li>Helped develop and refine the SIMPLEX software to optimize frames and images for the Europa Imaging System (EIS) on Europa Clipper.</li>
             <li>Worked with regional imaging strategies that bridge global views and close-up observations to improve science return.</li>
             <li>Tuned input parameters and workflows to boost the utility of regional imaging for both scientific and look-ahead targeting.</li>
           </ul>
-        </article>
+        </div>
+      </div>
 
-        <article class="exp-card">
-          <div class="exp-role" data-editable="exp-2-role">Lead Systems Engineer</div>
+      <div class="exp-item">
+        <div class="exp-meta-col">
+          <div class="exp-date" data-editable="exp-2-date">Dec 2023 – May 2024</div>
           <div class="exp-org"  data-editable="exp-2-org">NASA L'SPACE MCA</div>
-          <div class="exp-meta" data-editable="exp-2-meta">Dec 2023 – May 2024</div>
-          <ul data-editable="exp-2-bullets">
+        </div>
+        <div class="exp-content-col">
+          <div class="exp-role" data-editable="exp-2-role">Lead Systems Engineer</div>
+          <ul class="exp-bullets" data-editable="exp-2-bullets">
             <li>Led systems engineering efforts on a Mars mission concept focused on volcanic emissions, water vapor, and subsurface ice.</li>
             <li>Used NX CAD and robotic concepts to design a lander/rover system for sampling geological elements like ice deposits and minerals.</li>
             <li>Connected atmospheric science, mission objectives, and hardware capabilities into a coherent architecture.</li>
           </ul>
-        </article>
+        </div>
+      </div>
 
-        <article class="exp-card">
-          <div class="exp-role" data-editable="exp-3-role">Robotics Engineer &amp; Data Scientist</div>
+      <div class="exp-item">
+        <div class="exp-meta-col">
+          <div class="exp-date" data-editable="exp-3-date">Aug 2023 – Apr 2024</div>
           <div class="exp-org"  data-editable="exp-3-org">Starship Robotics</div>
-          <div class="exp-meta" data-editable="exp-3-meta">Aug 2023 – Apr 2024</div>
-          <ul data-editable="exp-3-bullets">
+        </div>
+        <div class="exp-content-col">
+          <div class="exp-role" data-editable="exp-3-role">Robotics Engineer &amp; Data Scientist</div>
+          <ul class="exp-bullets" data-editable="exp-3-bullets">
             <li>Developed and optimized robotics software in Python and C++ for autonomous navigation and control on embedded Linux systems.</li>
             <li>Integrated machine learning and computer vision into the autonomy stack; debugged and profiled code for real-time execution.</li>
             <li>Designed custom electronic components and supported educational robotics workshops.</li>
           </ul>
-        </article>
-      </div>
-    </section>
-
-    <!-- ── PROJECTS ────────────────────────────────────────────── -->
-    <section id="projects">
-      <div class="section-label">Projects</div>
-      <div class="projects-header">
-        <h2 class="section-title">Selected mechanical &amp; software projects</h2>
-        <div class="projects-filter">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="mech">Mechanical</button>
-          <button class="filter-btn" data-filter="soft">Software</button>
         </div>
       </div>
 
-      <div class="projects-grid">
+    </div>
+  </section>
 
-        <!-- UAV LiDAR ─────────────────────────────────────────── -->
-        <article class="project-card" data-tags="mech soft">
-          <div class="project-chip-row">
-            <div class="project-type">Robotics &amp; Autonomy</div>
-            <div class="project-pill" data-editable="proj-uav-pill">ROS Noetic · VLP-16 LiDAR</div>
+  <!-- ── PROJECTS ────────────────────────────────────────────── -->
+  <section id="projects" class="reveal">
+    <div class="section-eyebrow">Projects</div>
+    <div class="projects-header">
+      <h2 class="section-title" data-editable="proj-title">Selected mechanical &amp; software projects</h2>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="mech">Mechanical</button>
+        <button class="filter-btn" data-filter="soft">Software</button>
+      </div>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- UAV LiDAR ─────────────────────────────────────────── -->
+      <article class="project-card" data-project-id="proj-uav" data-tags="mech soft">
+        <div class="project-chip-row">
+          <div class="project-type">Robotics &amp; Autonomy</div>
+          <div class="project-pill" data-editable="proj-uav-pill">ROS Noetic · VLP-16 LiDAR</div>
+        </div>
+        <h3 class="project-title"    data-editable="proj-uav-title">Autonomous UAV LiDAR Navigation System</h3>
+        <p  class="project-subtitle" data-editable="proj-uav-sub">
+          GPS-denied quadrotor navigating a 16 m × 16 m warehouse obstacle field using only a Velodyne VLP-16 LiDAR.
+          No pre-built map, no hand-coded route — sensors-only autonomy in ROS Noetic / Gazebo 11.
+        </p>
+        <div class="project-meta">
+          <span>ROS Noetic · Python</span><span>Gazebo 11 / WSL2</span>
+          <span>A* · Occupancy Grid</span><span>Velodyne VLP-16</span>
+        </div>
+        <div class="project-footer">
+          <button class="view-details-btn" data-action="view-details">
+            View details
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h8M5 1l4 4-4 4"/></svg>
+          </button>
+          <div class="project-links">
+            <a href="https://github.com/Svvipee/Hamza-Ouriour-Portfolio" target="_blank">GitHub</a>
           </div>
-          <h3 class="project-title" data-editable="proj-uav-title">Autonomous UAV LiDAR Navigation System</h3>
-          <p class="project-subtitle" data-editable="proj-uav-sub">
-            Engineered a GPS-denied quadrotor that autonomously navigates through a 16 m × 16 m
-            cluttered warehouse obstacle field using only a Velodyne VLP-16 LiDAR — no pre-built map,
-            no hand-coded route. Built on ROS Noetic / Gazebo 11 / Ubuntu 20.04 / WSL2.
-          </p>
-          <div class="project-meta">
-            <span>ROS Noetic · Python</span>
-            <span>Gazebo 11 / WSL2</span>
-            <span>A* · Occupancy Grid</span>
-            <span>Velodyne VLP-16</span>
-          </div>
-          <ul class="project-bullets" data-editable="proj-uav-bullets">
-            <li>Dual-layer control: 50 Hz reactive layer blending M-line attraction with 5-sector LiDAR avoidance; 0.2 Hz A* global planner on a live occupancy grid for visualization and recovery.</li>
-            <li>Custom 3D→2D LiDAR pipeline: horizontal-band slicing of VLP-16 point clouds, 0.45 m proximity filter to eliminate motor-housing phantom returns, finite range clamping.</li>
-            <li>Replaced a crashing hector_mapping package with a custom Bresenham ray-casting mapper maintaining a 320×320 log-odds grid at 5 cm resolution across the full warehouse.</li>
-            <li>Diagnosed three cascading failure modes — 0.9 m sensor blindspot, phantom obstacle false positives from motor reflections, and an oscillatory backward-force controller (RC3) — and systematically resolved each.</li>
+        </div>
+        <template class="proj-detail-default">
+          <p>A full ROS Noetic simulation of a GPS-denied autonomous quadrotor navigating a 16 m × 16 m indoor warehouse through storage racks, cardboard boxes, interior walls, and corner pillars — using only a Velodyne VLP-16 LiDAR. No pre-built map, no GPS, no hand-coded route.</p>
+
+          <h4>Sensor Pipeline</h4>
+          <p>The VLP-16 Gazebo plugin publishes a 3D point cloud. A processing node slices a thin horizontal band at cruise altitude, applies a 0.45 m proximity filter (eliminating phantom motor-housing returns), clamps infinite readings to range_max, and outputs a clean 2D laser scan consumed by all downstream navigation.</p>
+
+          <h4>Dual-Layer Control Architecture</h4>
+          <ul>
+            <li><strong>Fast layer (50 Hz):</strong> Blends an M-line attractor (pulls drone along the straight line to goal with lateral correction) with 5-sector LiDAR avoidance — forward obstacle → steer toward clearer diagonal; side sectors push laterally. Soft-stop progressively cuts M-line speed to zero at 0.55 m.</li>
+            <li><strong>Slow layer (0.2 Hz):</strong> Background A* planner on a live 2D occupancy grid, used for path visualization in RViz and as a recovery reference — not the primary controller.</li>
+            <li><strong>Custom mapping:</strong> Replaced crashing hector_mapping with a Bresenham ray-casting node maintaining a 320×320 log-odds grid at 5 cm resolution.</li>
           </ul>
-          <div class="project-footer">
-            <span data-editable="proj-uav-footer">14.14 m diagonal mission through live obstacle field — sensors-only autonomy.</span>
-            <div class="project-links">
-              <a href="https://github.com/Svvipee/Hamza-Ouriour-Portfolio" target="_blank">GitHub</a>
-            </div>
-          </div>
-        </article>
 
-        <!-- SIMPLEX ──────────────────────────────────────────── -->
-        <article class="project-card" data-tags="soft">
-          <div class="project-chip-row">
-            <div class="project-type">Space Software</div>
-            <div class="project-pill" data-editable="proj-simplex-pill">Europa Clipper · EIS</div>
-          </div>
-          <h3 class="project-title" data-editable="proj-simplex-title">SIMPLEX Imaging Optimization Tool</h3>
-          <p class="project-subtitle" data-editable="proj-simplex-sub">
-            Mission-planning software that optimizes Europa Imaging System
-            frames and picture sequences to balance coverage, resolution, and
-            future close-up targeting opportunities.
-          </p>
-          <div class="project-meta">
-            <span>Python</span>
-            <span>Mission tooling</span>
-            <span>Image targeting strategy</span>
-          </div>
-          <div class="project-footer">
-            <span data-editable="proj-simplex-footer">Improved regional imaging utility for science &amp; look-ahead.</span>
-            <div class="project-links">
-              <a href="#" target="_blank">Summary</a>
-            </div>
-          </div>
-        </article>
+          <h4>Engineering Challenges Solved</h4>
+          <ul>
+            <li><strong>0.9 m sensor blindspot:</strong> VLP-16 plugin filtered all returns &lt; 0.9 m, causing walls to vanish on close approach. Fixed by lowering plugin threshold and adding obstacle memory (sector distances clear gradually, not instantly).</li>
+            <li><strong>Phantom motor obstacles:</strong> Motor housing reflections appeared as false forward obstacles, generating backward forces that drove the drone away from its goal. Raising filter to 0.45 m eliminated all phantom returns.</li>
+            <li><strong>RC3 oscillation:</strong> An over-engineered "corridor pressure" feature triggered backward forces when diagonal sectors read symmetrically, compounding with the motor issue to push the drone southwest. RC3 was removed and replaced with directional front-steering.</li>
+          </ul>
 
-        <!-- Mars Lander ──────────────────────────────────────── -->
-        <article class="project-card" data-tags="mech soft">
-          <div class="project-chip-row">
-            <div class="project-type">Systems &amp; Robotics</div>
-            <div class="project-pill" data-editable="proj-mars-pill">Mars mission concept</div>
-          </div>
-          <h3 class="project-title" data-editable="proj-mars-title">Mars Volcanism &amp; Ice Lander/Rover Concept</h3>
-          <p class="project-subtitle" data-editable="proj-mars-sub">
-            L'SPACE mission architecture exploring Martian volcanic emissions,
-            water vapor, and subsurface ice using a robotic lander and rover
-            equipped for geological sampling.
-          </p>
-          <div class="project-meta">
-            <span>NX CAD</span>
-            <span>Systems engineering</span>
-            <span>Environmental analysis</span>
-          </div>
-          <div class="project-footer">
-            <span data-editable="proj-mars-footer">Linked atmospheric science to rover design decisions.</span>
-            <div class="project-links">
-              <a href="srr_viewer_fixed.html" target="_blank">Mission SRR (PDF)</a>
-            </div>
-          </div>
-        </article>
+          <h4>Mission Profile</h4>
+          <p>14.14 m diagonal flight from (−5, −5) to (5, 5) — a route intentionally crossing multiple obstacles to force real navigation rather than flying through open space.</p>
+        </template>
+      </article>
 
-        <!-- Robotics Nav ─────────────────────────────────────── -->
-        <article class="project-card" data-tags="mech soft">
-          <div class="project-chip-row">
-            <div class="project-type">Robotics</div>
-            <div class="project-pill" data-editable="proj-nav-pill">Autonomy &amp; ML</div>
-          </div>
-          <h3 class="project-title" data-editable="proj-nav-title">Autonomous Robotics Navigation Stack</h3>
-          <p class="project-subtitle" data-editable="proj-nav-sub">
-            Software stack for small autonomous robots combining low-level
-            control, sensor fusion, and ML-powered perception for real-time
-            navigation.
-          </p>
-          <div class="project-meta">
-            <span>Python · C++</span>
-            <span>ROS / Embedded Linux</span>
-            <span>Computer vision &amp; ML</span>
-          </div>
-          <div class="project-footer">
-            <span data-editable="proj-nav-footer">Ensured reliable real-time execution on constrained hardware.</span>
-            <div class="project-links">
-              <a href="#" target="_blank">Overview</a>
-            </div>
-          </div>
-        </article>
+      <!-- SIMPLEX ──────────────────────────────────────────── -->
+      <article class="project-card" data-project-id="proj-simplex" data-tags="soft">
+        <div class="project-chip-row">
+          <div class="project-type">Space Software</div>
+          <div class="project-pill" data-editable="proj-simplex-pill">Europa Clipper · EIS</div>
+        </div>
+        <h3 class="project-title"    data-editable="proj-simplex-title">SIMPLEX Imaging Optimization Tool</h3>
+        <p  class="project-subtitle" data-editable="proj-simplex-sub">
+          Mission-planning software that optimizes Europa Imaging System frames and sequences
+          to balance coverage, resolution, and future close-up targeting opportunities.
+        </p>
+        <div class="project-meta">
+          <span>Python</span><span>Mission tooling</span><span>Image targeting</span>
+        </div>
+        <div class="project-footer">
+          <button class="view-details-btn" data-action="view-details">
+            View details
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h8M5 1l4 4-4 4"/></svg>
+          </button>
+          <div class="project-links"><a href="#" target="_blank">Summary</a></div>
+        </div>
+        <template class="proj-detail-default">
+          <p>Mission-planning software developed during my NASA Europa Clipper ICONS internship. SIMPLEX optimizes frame selection and image sequencing for the Europa Imaging System (EIS) — balancing regional coverage, resolution tradeoffs, and look-ahead targeting opportunities for future close-up passes.</p>
+          <h4>Key Contributions</h4>
+          <ul>
+            <li>Refined frame optimization algorithms to maximize science return within Europa Clipper's tight power and data budget constraints.</li>
+            <li>Developed regional imaging strategies bridging global context views with high-resolution close-up observations.</li>
+            <li>Tuned input parameters and workflow pipelines to improve the utility of regional imaging for both science teams and mission planning.</li>
+          </ul>
+        </template>
+      </article>
 
-        <!-- Thermo Visualizer ───────────────────────────────── -->
-        <article class="project-card" data-tags="soft">
-          <div class="project-chip-row">
-            <div class="project-type">Software</div>
-            <div class="project-pill" data-editable="proj-thermo-pill">Simulation tools</div>
-          </div>
-          <h3 class="project-title" data-editable="proj-thermo-title">Thermo–Fluids Cycle Visualizer</h3>
-          <p class="project-subtitle" data-editable="proj-thermo-sub">
-            Interactive Python tool that plots Brayton/Diesel cycles, computes
-            efficiencies, and lets users tweak parameters in real time for
-            thermo/fluids courses and labs.
-          </p>
-          <div class="project-meta">
-            <span>Python · NumPy · Matplotlib</span>
-            <span>GUI (Tkinter / web)</span>
-            <span>Engineering education</span>
-          </div>
-          <div class="project-footer">
-            <span data-editable="proj-thermo-footer">Helped classmates debug cycle calculations much faster.</span>
-            <div class="project-links">
-              <a href="thermo_demo_full.html" target="_blank">Demo</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Torsion Rig ──────────────────────────────────────── -->
-        <article class="project-card" data-tags="mech soft">
-          <div class="project-chip-row">
-            <div class="project-type">Controls &amp; Lab Automation</div>
-            <div class="project-pill" data-editable="proj-torsion-pill">Experimental mechanics</div>
-          </div>
-          <h3 class="project-title" data-editable="proj-torsion-title">Automated Torsion Test Rig</h3>
-          <p class="project-subtitle" data-editable="proj-torsion-sub">
-            Automated a lab torsion testing setup with microcontroller-based
-            motor control and PC software for real-time torque–angle and
-            stress–strain plotting.
-          </p>
-          <div class="project-meta">
-            <span>Arduino / STM32</span>
-            <span>Serial data logging</span>
-            <span>Live plotting UI</span>
-          </div>
-          <div class="project-footer">
-            <span data-editable="proj-torsion-footer">Cut manual data collection time by ~60%.</span>
-            <div class="project-links">
-              <a href="torsion_control.html#firmware" target="_blank">Firmware</a>
-              <a href="torsion_control.html#ui"       target="_blank">Desktop UI</a>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- ── CONTACT ────────────────────────────────────────────── -->
-    <section id="contact">
-      <div class="section-label">Contact</div>
-      <h2 class="section-title" data-editable="contact-title">Let's build something together</h2>
-
-      <div class="contact-grid">
-        <div class="contact-text">
-          <p data-editable="contact-p1">
-            I'm open to internships, co-ops, and collaborations in mechanical
-            engineering, robotics, space systems, and engineering-focused
-            software tooling.
-          </p>
-          <div class="contact-highlight">
-            <span>What I bring:</span>
-            <span data-editable="contact-highlight"> experience across NASA mission work,
-            robotics, and engineering software — plus a strong foundation in
-            mechanics, thermo/fluids, and numerical methods.</span>
-          </div>
-          <div class="contact-list">
-            <div>Email: <a href="mailto:hamza.ouriour@gmail.com">hamza.ouriour@gmail.com</a></div>
-            <div>Phone: <a href="tel:+16174078157">+1 (617) 407-8157</a></div>
-            <div>Location: <span>Massachusetts, USA</span></div>
-            <div>LinkedIn:
-              <a href="https://www.linkedin.com/in/hamza-ouriour-659123290/" target="_blank">
-                linkedin.com/in/hamza-ouriour-659123290
-              </a>
-            </div>
+      <!-- Mars Lander ──────────────────────────────────────── -->
+      <article class="project-card" data-project-id="proj-mars" data-tags="mech soft">
+        <div class="project-chip-row">
+          <div class="project-type">Systems &amp; Robotics</div>
+          <div class="project-pill" data-editable="proj-mars-pill">Mars mission concept</div>
+        </div>
+        <h3 class="project-title"    data-editable="proj-mars-title">Mars Volcanism &amp; Ice Lander/Rover Concept</h3>
+        <p  class="project-subtitle" data-editable="proj-mars-sub">
+          L'SPACE mission architecture exploring Martian volcanic emissions, water vapor, and subsurface
+          ice using a robotic lander and rover designed for geological sampling.
+        </p>
+        <div class="project-meta">
+          <span>NX CAD</span><span>Systems engineering</span><span>Environmental analysis</span>
+        </div>
+        <div class="project-footer">
+          <button class="view-details-btn" data-action="view-details">
+            View details
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h8M5 1l4 4-4 4"/></svg>
+          </button>
+          <div class="project-links">
+            <a href="srr_viewer_fixed.html" target="_blank">Mission SRR</a>
           </div>
         </div>
+        <template class="proj-detail-default">
+          <p>Led systems engineering for a NASA L'SPACE Mission Concept Academy (MCA) project targeting Martian volcanic and glaciological science. The mission concept deployed a lander/rover system to study volcanic emissions, water vapor signatures, and subsurface ice deposits.</p>
+          <h4>Systems Engineering Work</h4>
+          <ul>
+            <li>Defined mission science objectives and mapped them to instrument and mobility requirements.</li>
+            <li>Designed a lander/rover architecture in Siemens NX CAD optimized for Martian terrain traversal and sample collection.</li>
+            <li>Integrated atmospheric science constraints, thermal environment, and power budgets into a coherent systems architecture.</li>
+            <li>Produced the System Requirements Review (SRR) documentation — linked below.</li>
+          </ul>
+        </template>
+      </article>
 
-        <aside class="contact-card">
-          <h3>Quick stats</h3>
-          <div class="contact-row">
-            <span class="contact-tag">NASA: Europa Clipper &amp; L'SPACE</span>
-            <span class="contact-tag">Robotics &amp; autonomy experience</span>
+      <!-- Robotics Nav ─────────────────────────────────────── -->
+      <article class="project-card" data-project-id="proj-nav" data-tags="mech soft">
+        <div class="project-chip-row">
+          <div class="project-type">Robotics</div>
+          <div class="project-pill" data-editable="proj-nav-pill">Autonomy &amp; ML</div>
+        </div>
+        <h3 class="project-title"    data-editable="proj-nav-title">Autonomous Robotics Navigation Stack</h3>
+        <p  class="project-subtitle" data-editable="proj-nav-sub">
+          Software stack for small autonomous robots combining low-level control, sensor fusion,
+          and ML-powered perception for real-time navigation on embedded Linux.
+        </p>
+        <div class="project-meta">
+          <span>Python · C++</span><span>ROS / Embedded Linux</span><span>CV &amp; ML</span>
+        </div>
+        <div class="project-footer">
+          <button class="view-details-btn" data-action="view-details">
+            View details
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h8M5 1l4 4-4 4"/></svg>
+          </button>
+          <div class="project-links"><a href="#" target="_blank">Overview</a></div>
+        </div>
+        <template class="proj-detail-default">
+          <p>Developed at Starship Robotics — a full autonomy software stack for compact autonomous ground robots. The stack handles real-time navigation, obstacle avoidance, and environment perception on constrained embedded Linux hardware.</p>
+          <h4>Stack Components</h4>
+          <ul>
+            <li>Low-level motor control and kinematic models in C++ for real-time actuation.</li>
+            <li>Sensor fusion pipeline combining IMU, encoders, and camera data for state estimation.</li>
+            <li>ML-powered perception module (computer vision) for obstacle detection and classification.</li>
+            <li>ROS-based architecture enabling modularity and straightforward integration of new sensors or planners.</li>
+          </ul>
+        </template>
+      </article>
+
+      <!-- Thermo Visualizer ───────────────────────────────── -->
+      <article class="project-card" data-project-id="proj-thermo" data-tags="soft">
+        <div class="project-chip-row">
+          <div class="project-type">Software</div>
+          <div class="project-pill" data-editable="proj-thermo-pill">Simulation tools</div>
+        </div>
+        <h3 class="project-title"    data-editable="proj-thermo-title">Thermo–Fluids Cycle Visualizer</h3>
+        <p  class="project-subtitle" data-editable="proj-thermo-sub">
+          Interactive Python tool plotting Brayton/Diesel cycles, computing efficiencies,
+          and enabling real-time parameter tweaking for engineering courses and labs.
+        </p>
+        <div class="project-meta">
+          <span>Python · NumPy</span><span>Matplotlib</span><span>GUI (Tkinter)</span>
+        </div>
+        <div class="project-footer">
+          <button class="view-details-btn" data-action="view-details">
+            View details
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h8M5 1l4 4-4 4"/></svg>
+          </button>
+          <div class="project-links"><a href="thermo_demo_full.html" target="_blank">Live Demo</a></div>
+        </div>
+        <template class="proj-detail-default">
+          <p>An interactive desktop and web tool for visualizing thermodynamic power cycles. Built to help engineering students understand cycle behavior without tedious manual iteration.</p>
+          <h4>Features</h4>
+          <ul>
+            <li>Real-time P-V and T-S diagrams for Brayton and Diesel cycles.</li>
+            <li>Parametric controls: compression ratio, pressure ratio, working fluid properties.</li>
+            <li>Live efficiency calculations with visual feedback as parameters change.</li>
+            <li>Deployed as both a Tkinter desktop app and a web-based interactive demo.</li>
+          </ul>
+        </template>
+      </article>
+
+      <!-- Torsion Rig ──────────────────────────────────────── -->
+      <article class="project-card" data-project-id="proj-torsion" data-tags="mech soft">
+        <div class="project-chip-row">
+          <div class="project-type">Controls &amp; Lab Automation</div>
+          <div class="project-pill" data-editable="proj-torsion-pill">Experimental mechanics</div>
+        </div>
+        <h3 class="project-title"    data-editable="proj-torsion-title">Automated Torsion Test Rig</h3>
+        <p  class="project-subtitle" data-editable="proj-torsion-sub">
+          Microcontroller-automated torsion testing with real-time torque–angle and
+          stress–strain plotting — cutting manual data collection time by ~60%.
+        </p>
+        <div class="project-meta">
+          <span>Arduino / STM32</span><span>Serial data logging</span><span>Live plotting UI</span>
+        </div>
+        <div class="project-footer">
+          <button class="view-details-btn" data-action="view-details">
+            View details
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h8M5 1l4 4-4 4"/></svg>
+          </button>
+          <div class="project-links">
+            <a href="torsion_control.html#firmware" target="_blank">Firmware</a>
+            <a href="torsion_control.html#ui"       target="_blank">Desktop UI</a>
           </div>
-          <div class="contact-row">
-            <span class="contact-tag">GPA 3.75 · WIT</span>
-            <span class="contact-tag">CSWA · SolidWorks certified</span>
+        </div>
+        <template class="proj-detail-default">
+          <p>Automated a lab torsion testing rig that was previously operated entirely by hand. The system uses a microcontroller to drive the motor and stream real-time sensor data to a PC application that plots torque–angle and stress–strain curves live.</p>
+          <h4>System Components</h4>
+          <ul>
+            <li>Arduino/STM32 firmware for precise stepper motor control and torque sensor ADC reading.</li>
+            <li>Serial data streaming protocol for reliable PC communication at high sample rates.</li>
+            <li>Desktop UI with live matplotlib plots, automatic test record export (CSV), and error bounds visualization.</li>
+            <li>Reduced manual data collection and post-processing time by approximately 60%.</li>
+          </ul>
+        </template>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── CONTACT ────────────────────────────────────────────── -->
+  <section id="contact" class="reveal">
+    <div class="section-eyebrow">Contact</div>
+    <h2 class="section-title" data-editable="contact-title">Let's build something together</h2>
+
+    <div class="contact-layout">
+      <div class="contact-body">
+        <p data-editable="contact-p1">
+          I'm open to internships, co-ops, and collaborations in mechanical
+          engineering, robotics, space systems, and engineering-focused software tooling.
+        </p>
+        <div class="contact-callout">
+          <strong>What I bring:</strong>
+          <span data-editable="contact-callout"> experience across NASA mission work, robotics, and engineering software — plus a strong foundation in mechanics, thermo/fluids, and numerical methods.</span>
+        </div>
+        <div class="contact-links">
+          <div><span>Email</span> <a href="mailto:hamza.ouriour@gmail.com" data-editable="contact-email">hamza.ouriour@gmail.com</a></div>
+          <div><span>Phone</span> <a href="tel:+16174078157" data-editable="contact-phone">+1 (617) 407-8157</a></div>
+          <div><span>Location</span> <span data-editable="contact-location">Massachusetts, USA</span></div>
+          <div><span>LinkedIn</span>
+            <a href="https://www.linkedin.com/in/hamza-ouriour-659123290/" target="_blank" data-editable="contact-linkedin">
+              linkedin.com/in/hamza-ouriour-659123290
+            </a>
           </div>
-          <p data-editable="contact-card-p">
-            If you'd like a deeper walkthrough of any project or a copy of my
-            full résumé, feel free to reach out — I'm happy to dive into the
-            technical details.
-          </p>
-        </aside>
+        </div>
       </div>
-    </section>
 
-  </main>
+      <aside class="contact-card">
+        <h3>Quick stats</h3>
+        <div class="contact-stat-row" data-editable="contact-stats-1">
+          <span class="contact-stat">NASA: Europa Clipper &amp; L'SPACE</span>
+          <span class="contact-stat">Robotics &amp; autonomy</span>
+        </div>
+        <div class="contact-stat-row" data-editable="contact-stats-2">
+          <span class="contact-stat">GPA 3.75 · WIT</span>
+          <span class="contact-stat">CSWA certified</span>
+        </div>
+        <p data-editable="contact-card-p">
+          If you'd like a deeper walkthrough of any project or a copy of my
+          full résumé, feel free to reach out — I'm happy to dive into the technical details.
+        </p>
+      </aside>
+    </div>
+  </section>
 
-  <!-- ── FOOTER ───────────────────────────────────────────────── -->
-  <footer>
-    <span>&copy; <strong>2025</strong> Hamza Ouriour.</span>
-    <span>
-      Built with HTML, CSS &amp; JavaScript.
-      <span id="admin-trigger" title=""></span>
-    </span>
-  </footer>
+</main>
 
-  <!-- ── SCRIPTS ──────────────────────────────────────────────── -->
-  <script src="admin.js"></script>
-  <script>
-    /* ── NAV TOGGLE ─── */
-    const toggle = document.querySelector('.nav-toggle');
-    const links  = document.querySelector('.nav-links');
-    toggle.addEventListener('click', () => links.classList.toggle('mobile-open'));
+<!-- ── FOOTER ───────────────────────────────────────────────── -->
+<footer>
+  <span>&copy; <strong data-editable="footer-year">2025</strong> <strong data-editable="footer-name">Hamza Ouriour</strong>.</span>
+  <span data-editable="footer-tagline">
+    Built with HTML, CSS &amp; JavaScript.
+    <span id="admin-trigger" title=""></span>
+  </span>
+</footer>
 
-    /* ── PROJECT FILTER ─── */
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards  = document.querySelectorAll('.project-card');
+<!-- ── SCRIPTS ──────────────────────────────────────────────── -->
+<script src="admin.js"></script>
+<script>
+'use strict';
 
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter');
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        projectCards.forEach(card => {
-          const tags = card.getAttribute('data-tags') || '';
-          const show = filter === 'all' || tags.split(' ').includes(filter);
-          card.style.display = show ? '' : 'none';
-        });
-      });
+/* ── NAV toggle ── */
+const navToggle = document.getElementById('nav-toggle');
+const navLinks  = document.getElementById('nav-links');
+navToggle.addEventListener('click', () => navLinks.classList.toggle('is-open'));
+document.addEventListener('click', e => {
+  if (!navLinks.contains(e.target) && !navToggle.contains(e.target))
+    navLinks.classList.remove('is-open');
+});
+
+/* ── Header scroll class ── */
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('is-scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* ── Active nav link ── */
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav-links a');
+
+function updateActiveLink() {
+  const offset = header.offsetHeight + 60;
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY + offset >= sec.offsetTop) current = sec.id;
+  });
+  navAnchors.forEach(a => {
+    a.classList.toggle('is-active', a.getAttribute('href') === `#${current}`);
+  });
+}
+window.addEventListener('scroll', updateActiveLink, { passive: true });
+updateActiveLink();
+
+/* ── Smooth scroll ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    navLinks.classList.remove('is-open');
+  });
+});
+
+/* ── Scroll reveal ── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('revealed'); revealObs.unobserve(en.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── Project filter ── */
+const filterBtns  = document.querySelectorAll('.filter-btn');
+const projCards   = document.querySelectorAll('.project-card');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = btn.dataset.filter;
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    projCards.forEach(card => {
+      const tags = (card.dataset.tags || '').split(' ');
+      card.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
     });
-  </script>
-
+  });
+});
+</script>
 </body>
 </html>
