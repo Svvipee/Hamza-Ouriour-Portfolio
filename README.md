@@ -34,11 +34,11 @@ The résumé supersedes the prior site for education, roles, dates, and results.
 UAV troubleshooting detail and the L’SPACE team report supply additional context.
 Reported results are not independently reproduced. Simulation, concept requirements,
 team contributions, and illustrative demo settings are identified in the pages.
-Missing troubleshooting episodes are not presented as accomplishments.
+Troubleshooting narratives include the owner-confirmed LTV, Hallam, EIS, and AeroSense stories.
 
 `DATA-VERIFY-T01` in the torsion example identifies inherited illustrative firmware settings.
-The separate owner handoff contains the full evidence checklist and unpublished
-`STORY-VERIFY` interview prompts. Do not publish those prompts as facts without confirmation.
+The portfolio owner confirmed the troubleshooting stories and authorized publication.
+They appear as regular engineering case-study content.
 
 The old `admin.js` is retained in version control but no longer loaded. Its editor stored
 changes only in the visitor's browser and could overlay stale résumé content. Use the
