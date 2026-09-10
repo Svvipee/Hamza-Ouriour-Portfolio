@@ -4,23 +4,11 @@
 <meta charset="UTF-8">
 <title>Automated Torsion Test Rig – Firmware &amp; UI</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{margin:0;padding:0;background:#050816;color:#e5e7eb;font-family:system-ui,sans-serif}
-.hero{padding:80px 20px 20px;max-width:1080px;margin:auto}
-h1{font-size:2.4rem;font-weight:700;background:linear-gradient(to right,#a855f7,#4f46e5,#22d3ee);-webkit-background-clip:text;color:transparent;margin-bottom:10px}
-.subtitle{color:#9ca3af;font-size:0.95rem;max-width:650px}
-.section{max-width:1080px;margin:25px auto;background:rgba(15,23,42,.96);border:1px solid rgba(31,41,55,.8);border-radius:20px;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,.45)}
-h2{font-size:1.4rem;margin-bottom:8px}
-p{font-size:0.95rem;color:#d1d5db}
-pre{white-space:pre-wrap;background:#0f172a;padding:18px;border-radius:14px;margin-top:15px;border:1px solid #374151;font-size:.85rem;color:#cbd5e1;overflow:auto}
-.anchor{scroll-margin-top:80px}
-.back{display:inline-block;margin:20px 0;color:#8ab4ff}
-.back:hover{text-decoration:underline}
-</style>
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="lab.css"><link rel="icon" href="favicon.svg"><meta name="description" content="Illustrative torsion acquisition firmware and Python plotting example, with calibration limitations.">
 </head>
-<body>
+<body><main class="lab" id="main"><a class="breadcrumb" href="index.html#library">← Project library</a><div class="note"><strong>Illustrative code, not validated rig firmware.</strong> The original example contains assumed calibration and board-specific pin choices. Torque is recorded as sensor voltage, not calibrated N·m. Motor safety interlocks and hardware validation are not demonstrated. The earlier ~60% time-saving claim is omitted pending test records.</div>
 
-<div class="hero">
+<div class="lab-intro">
   <h1>Automated Torsion Test Rig – Firmware &amp; Desktop UI</h1>
   <p class="subtitle">
     This page shows example firmware and desktop software for an automated torsion test rig:
@@ -29,14 +17,15 @@ pre{white-space:pre-wrap;background:#0f172a;padding:18px;border-radius:14px;marg
   </p>
 </div>
 
-<div id="firmware" class="section anchor">
+<div id="firmware" class="lab-panel anchor">
   <h2>Microcontroller Firmware (Torque &amp; Angle Streaming)</h2>
   <p>
     The firmware below is written in Arduino-style C++ for an MCU that drives a stepper motor,
     reads a torque sensor and rotary encoder, and streams data over USB serial in CSV format:
   </p>
   <pre>
-// Pseudo-credible firmware for an automated torsion rig
+// Illustrative firmware: DATA-VERIFY-T01 — board/pins, motor settings, ADC reference,
+// encoder calibration, serial timing, and host settings need hardware verification.
 #include &lt;AccelStepper.h&gt;
 
 const int dirPin       = 2;
@@ -91,7 +80,7 @@ void loop() {
   </pre>
 </div>
 
-<div id="ui" class="section anchor">
+<div id="ui" class="lab-panel anchor">
   <h2>Desktop UI (Python – Live Plot &amp; Logging)</h2>
   <p>
     On the PC side, a lightweight Python script can listen to the serial stream, plot torque vs.
@@ -157,5 +146,5 @@ ser.close()
   <a class="back" href="index.html">← Back to Portfolio</a>
 </div>
 
-</body>
+</main></body>
 </html>
