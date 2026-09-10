@@ -1,199 +1,30 @@
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-<meta charset='UTF-8'>
-<title>Thermo-Fluids Cycle Visualizer Demo | Hamza Ouriour</title>
-<meta name='viewport' content='width=device-width, initial-scale=1.0'>
-<style>
-body{margin:0;padding:0;background:#050816;color:#e5e7eb;font-family:system-ui,sans-serif}
-.hero{padding:80px 20px 40px;max-width:1080px;margin:auto}
-h1{font-size:2.4rem;font-weight:700;background:linear-gradient(to right,#a855f7,#4f46e5,#22d3ee);-webkit-background-clip:text;color:transparent;margin-bottom:10px}
-.subtitle{color:#9ca3af;font-size:0.95rem;max-width:600px}
-.panel{max-width:1080px;margin:30px auto;background:rgba(15,23,42,.96);border:1px solid rgba(31,41,55,.8);border-radius:20px;padding:30px;box-shadow:0 20px 40px rgba(0,0,0,.45)}
-label{display:block;margin-top:18px;color:#cbd5e1;font-size:.92rem}
-input{width:100%;padding:10px;margin-top:6px;border-radius:10px;border:1px solid #374151;background:#0f172a;color:white}
-button{margin-top:25px;padding:12px 22px;background:linear-gradient(135deg,#4f46e5,#9333ea);border:none;border-radius:12px;color:white;cursor:pointer;font-size:1rem;box-shadow:0 10px 25px rgba(79,70,229,.4)}
-button:hover{filter:brightness(1.1);transform:translateY(-2px)}
-canvas{width:100%;margin-top:30px;border-radius:16px;background:#0f172a;border:1px solid #374151}
-pre{white-space:pre-wrap;background:#0f172a;padding:20px;border-radius:16px;margin-top:25px;border:1px solid #374151;font-size:.85rem;color:#cbd5e1;overflow:auto}
-.code-title{font-size:1.3rem;margin-top:40px;font-weight:600}
-.back{display:inline-block;margin:20px 0;color:#8ab4ff}
-.back:hover{text-decoration:underline}
-</style>
-</head>
-<body>
-
-<div class='hero'>
-  <h1>Thermo-Fluids Cycle Visualizer Demo</h1>
-  <p class='subtitle'>
-    Interactive simulation of an ideal Brayton cycle with real computed values and a drawn T–s style curve.
-    This page also exposes the full source code so reviewers can see exactly how it works.
-  </p>
-</div>
-
-<div class='panel'>
-  <label>Pressure Ratio (P₂/P₁)</label>
-  <input type='number' id='pr' value='8' min='1' step='0.1'>
-
-  <label>Specific Heat Ratio γ</label>
-  <input type='number' id='gamma' value='1.4' min='1.1' max='1.67' step='0.01'>
-
-  <label>Inlet Temperature (K)</label>
-  <input type='number' id='T1' value='300' min='200' step='1'>
-
-  <button onclick='runCycle()'>Run Cycle</button>
-
-  <div id='result'></div>
-  <canvas id='chart' width='900' height='420'></canvas>
-
-  <h2 class='code-title'>How This Demo Works (Full Source Code)</h2>
-  <pre>
-// Thermodynamic model:
-// Ideal Brayton cycle with user-defined pressure ratio (PR), gamma, and T1.
-// State temperatures are computed as:
-//   T2 = T1 * PR^((γ - 1)/γ)
-//   T3 = T2 * 2.5          (pseudo heat addition factor for visualization)
-//   T4 = T3 / PR^((γ - 1)/γ)
-// Cycle thermal efficiency:
-//   η = 1 - 1 / PR^((γ - 1)/γ)
-//
-// JavaScript responsibilities:
-// • Read the inputs from the form
-// • Compute state temperatures and efficiency
-// • Write formatted results back to the page
-// • Draw a stylized T–s-like curve on an HTML5 canvas
-
-function runCycle() {
-  const pr    = parseFloat(document.getElementById('pr').value);
-  const gamma = parseFloat(document.getElementById('gamma').value);
-  const T1    = parseFloat(document.getElementById('T1').value);
-
-  // Ideal Brayton relations:
-  const exp  = (gamma - 1) / gamma;
-  const T2   = T1 * Math.pow(pr, exp);
-  const T3   = T2 * 2.5;               // pseudo heat addition
-  const T4   = T3 / Math.pow(pr, exp);
-  const eff  = 1 - 1 / Math.pow(pr, exp);
-
-  document.getElementById('result').innerHTML =
-    "Thermal Efficiency: " + (eff * 100).toFixed(2) + "%\n" +
-    "T₂: " + T2.toFixed(1) + " K | " +
-    "T₃: " + T3.toFixed(1) + " K | " +
-    "T₄: " + T4.toFixed(1) + " K";
-
-  drawChart(T1, T2, T3, T4);
-}
-
-function drawChart(T1, T2, T3, T4) {
-  const canvas = document.getElementById("chart");
-  const ctx    = canvas.getContext("2d");
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Axes
-  ctx.strokeStyle = "#4f46e5";
-  ctx.lineWidth   = 2;
-  ctx.beginPath();
-  ctx.moveTo(50, 380); ctx.lineTo(850, 380);  // x-axis
-  ctx.moveTo(50, 380); ctx.lineTo(50,  40);   // y-axis
-  ctx.stroke();
-
-  // Scale temperatures into the canvas vertical range
-  const Tmax  = T4 * 1.2;
-  const scale = T => 380 - (T / Tmax) * 320;
-
-  const pts = [
-    { x: 150, y: scale(T1) },
-    { x: 350, y: scale(T2) },
-    { x: 550, y: scale(T3) },
-    { x: 750, y: scale(T4) }
-  ];
-
-  // Connect the cycle points
-  ctx.strokeStyle = "#a855f7";
-  ctx.lineWidth   = 3;
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for (const p of pts) ctx.lineTo(p.x, p.y);
-  ctx.stroke();
-
-  // Draw markers
-  ctx.fillStyle = "#22d3ee";
-  for (const p of pts) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-    ctx.fill();
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ideal Brayton cycle visualizer | Hamza Ouriour</title><meta name="description" content="Interactive ideal Brayton efficiency and state-temperature model."><meta property="og:title" content="Ideal Brayton cycle visualizer | Hamza Ouriour"><meta property="og:description" content="Interactive ideal Brayton efficiency and state-temperature model."><meta property="og:type" content="website"><meta property="og:url" content="https://svvipee.github.io/Hamza-Ouriour-Portfolio/thermo_demo_full.html"><link rel="canonical" href="https://svvipee.github.io/Hamza-Ouriour-Portfolio/thermo_demo_full.html"><meta name="theme-color" content="#142b3e"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"><script defer src="site.js"></script><link rel="stylesheet" href="lab.css"></head><body><a class="skip" href="#main">Skip to content</a><header><nav class="nav wrap" aria-label="Main navigation"><a class="brand" href="index.html"><span class="monogram" aria-hidden="true">HO</span>Hamza Ouriour</a><button class="menu-toggle" aria-controls="navigation" aria-expanded="false">Menu</button><div class="nav-links" id="navigation"><a href="index.html#projects">Projects</a><a href="index.html#experience">Experience</a><a href="index.html#skills">Skills</a><a href="index.html#about">About</a><a href="index.html#contact">Contact</a><a href="Hamza_Ouriour_Resume.pdf">Résumé ↗</a></div></nav></header><main class="lab" id="main"><a class="breadcrumb" href="projects/thermofluids.html">← Thermofluids case study</a><p class="eyebrow">Interactive engineering model</p><h1>Ideal Brayton cycle.</h1><p class="lead">Explore how pressure ratio and specific heat ratio affect ideal thermal efficiency. This demonstration uses constant specific heats, isentropic compression/expansion, and no pressure losses.</p><div class="lab-panel"><form id="cycle-form" novalidate><div class="inputs"><label for="pr">Pressure ratio P₂/P₁<input id="pr" type="number" value="8" min="1.01" step="0.1" required></label><label for="gamma">Specific heat ratio γ<input id="gamma" type="number" value="1.4" min="1.01" max="1.67" step="0.01" required></label><label for="T1">Inlet temperature (K)<input id="T1" type="number" value="300" min="1" step="1" required></label></div><button class="button" style="margin-top:24px" type="submit">Calculate cycle →</button></form><p id="result" role="status" aria-live="polite"></p><canvas id="chart" width="900" height="420" role="img" aria-label="Temperature at four cycle states; numerical temperatures are listed above">State temperatures are listed in the calculation result above.</canvas><p class="evidence">The horizontal axis is cycle state, not entropy. Heat addition uses the retained illustration parameter T₃ = 2.5 T₂; it is not measured turbine data.</p></div><section class="lab-panel"><h2>Model equations</h2><p>T₂ = T₁ rₚ<sup>(γ−1)/γ</sup> &nbsp; · &nbsp; T₃ = 2.5 T₂ &nbsp; · &nbsp; T₄ = T₃ / rₚ<sup>(γ−1)/γ</sup></p><p>η = 1 − 1 / rₚ<sup>(γ−1)/γ</sup></p><details><summary>Inspect the JavaScript implementation</summary><pre id="source-code">&#x27;use strict&#x27;;
+// Educational ideal Brayton model; no pressure losses or variable specific heats.
+// The 2.5 heat-addition factor is a retained illustration parameter, not test data.
+const form=document.querySelector(&#x27;#cycle-form&#x27;);
+const result=document.querySelector(&#x27;#result&#x27;);
+function runCycle(event){
+  event?.preventDefault();
+  const pr=Number(document.querySelector(&#x27;#pr&#x27;).value),gamma=Number(document.querySelector(&#x27;#gamma&#x27;).value),T1=Number(document.querySelector(&#x27;#T1&#x27;).value);
+  const raw=[&#x27;pr&#x27;,&#x27;gamma&#x27;,&#x27;T1&#x27;].map(id=&gt;document.getElementById(id).value.trim());
+  if(raw.some(v=&gt;!v)||![pr,gamma,T1].every(Number.isFinite)||pr&lt;=1||gamma&lt;=1||gamma&gt;1.67||T1&lt;=0){
+    result.textContent=&#x27;Enter a pressure ratio greater than 1, γ between 1 and 1.67 (exclusive of 1), and a positive inlet temperature.&#x27;;
+    document.querySelector(&#x27;#chart&#x27;).getContext(&#x27;2d&#x27;).clearRect(0,0,900,420);return;
   }
+  const ratio=Math.pow(pr,(gamma-1)/gamma);
+  const states=[T1,T1*ratio,T1*ratio*2.5,T1*2.5];
+  if(!states.every(Number.isFinite)){result.textContent=&#x27;These inputs exceed the numerical range. Use smaller values.&#x27;;return;}
+  const eff=1-1/ratio;
+  result.textContent=`Ideal thermal efficiency: ${(eff*100).toFixed(2)}%. T₁: ${states[0].toFixed(1)} K · T₂: ${states[1].toFixed(1)} K · T₃: ${states[2].toFixed(1)} K · T₄: ${states[3].toFixed(1)} K.`;
+  const canvas=document.querySelector(&#x27;#chart&#x27;),ctx=canvas.getContext(&#x27;2d&#x27;);
+  ctx.clearRect(0,0,900,420);ctx.fillStyle=&#x27;#fff&#x27;;ctx.fillRect(0,0,900,420);
+  const max=Math.max(...states)*1.15,ys=t=&gt;350-t/max*290,xs=[150,350,550,750];
+  ctx.font=&#x27;15px Arial&#x27;;ctx.fillStyle=&#x27;#506171&#x27;;ctx.fillText(&#x27;Temperature (K)&#x27;,24,26);
+  for(let i=0;i&lt;=4;i++){const y=350-i*290/4;ctx.strokeStyle=&#x27;#d5dde2&#x27;;ctx.beginPath();ctx.moveTo(75,y);ctx.lineTo(840,y);ctx.stroke();ctx.fillText((max*i/4).toFixed(0),15,y+5);}
+  ctx.strokeStyle=&#x27;#245d80&#x27;;ctx.lineWidth=3;ctx.beginPath();states.forEach((t,i)=&gt;i?ctx.lineTo(xs[i],ys(t)):ctx.moveTo(xs[i],ys(t)));ctx.stroke();
+  states.forEach((t,i)=&gt;{ctx.fillStyle=&#x27;#142b3e&#x27;;ctx.beginPath();ctx.arc(xs[i],ys(t),5,0,Math.PI*2);ctx.fill();ctx.fillText(t.toFixed(1)+&#x27; K&#x27;,xs[i]-29,ys(t)-15);ctx.fillText(&#x27;State &#x27;+(i+1),xs[i]-25,380);});
+  ctx.fillStyle=&#x27;#506171&#x27;;ctx.fillText(&#x27;State sequence — not entropy&#x27;,320,410);
 }
-  </pre>
-
-  <a class='back' href='index.html'>← Back to Portfolio</a>
-</div>
-
-<script>
-function runCycle() {
-  const pr    = parseFloat(document.getElementById('pr').value);
-  const gamma = parseFloat(document.getElementById('gamma').value);
-  const T1    = parseFloat(document.getElementById('T1').value);
-
-  const exp  = (gamma - 1) / gamma;
-  const T2   = T1 * Math.pow(pr, exp);
-  const T3   = T2 * 2.5;
-  const T4   = T3 / Math.pow(pr, exp);
-  const eff  = 1 - 1 / Math.pow(pr, exp);
-
-  document.getElementById('result').innerHTML =
-    `<p style='margin-top:20px;font-size:1rem;'>
-      <strong>Thermal Efficiency:</strong> ${(eff*100).toFixed(2)}%<br><br>
-      <strong>T₂:</strong> ${T2.toFixed(1)} K &nbsp;&nbsp;
-      <strong>T₃:</strong> ${T3.toFixed(1)} K &nbsp;&nbsp;
-      <strong>T₄:</strong> ${T4.toFixed(1)} K
-     </p>`;
-
-  drawChart(T1, T2, T3, T4);
-}
-
-function drawChart(T1, T2, T3, T4) {
-  const canvas = document.getElementById("chart");
-  const ctx    = canvas.getContext("2d");
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.strokeStyle = "#4f46e5";
-  ctx.lineWidth   = 2;
-  ctx.beginPath();
-  ctx.moveTo(50, 380); ctx.lineTo(850, 380);
-  ctx.moveTo(50, 380); ctx.lineTo(50,  40);
-  ctx.stroke();
-
-  const Tmax  = T4 * 1.2;
-  const scale = T => 380 - (T / Tmax) * 320;
-
-  const pts = [
-    { x: 150, y: scale(T1) },
-    { x: 350, y: scale(T2) },
-    { x: 550, y: scale(T3) },
-    { x: 750, y: scale(T4) }
-  ];
-
-  ctx.strokeStyle = "#a855f7";
-  ctx.lineWidth   = 3;
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for (const p of pts) ctx.lineTo(p.x, p.y);
-  ctx.stroke();
-
-  ctx.fillStyle = "#22d3ee";
-  for (const p of pts) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-// Run once on load
+form.addEventListener(&#x27;submit&#x27;,runCycle);
 runCycle();
-</script>
-
-</body>
-</html>
+</pre></details><p><a href="thermo.js">Open the source file</a></p></section><script src="thermo.js"></script></main><footer><div class="wrap"><span>© 2026 Hamza Ouriour · Boston, MA</span><a href="index.html#contact">Mechanical systems. Measured decisions.</a></div></footer></body></html>

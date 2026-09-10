@@ -1,0 +1,6 @@
+# Keep authoring utilities out of the GitHub Pages/Jekyll output.
+exclude:
+  - build_site.py
+  - check_site.py
+  - README.md
+  - admin.js
