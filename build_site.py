@@ -7,7 +7,7 @@ from pathlib import Path
 from html import escape as E
 
 ROOT = Path(__file__).resolve().parent
-BASE = 'https://svvipee.github.io/Hamza-Ouriour-Portfolio/'
+BASE = 'https://hamza-ouriour-portfolio.vercel.app/'
 
 def p(s): return '<p>'+s+'</p>'
 def ul(*items): return '<ul>'+''.join('<li>'+i+'</li>' for i in items)+'</ul>'
