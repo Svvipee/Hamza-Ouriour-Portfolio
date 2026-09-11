@@ -1,0 +1,8 @@
+# Authoring utilities — kept off the deployed site.
+# Mirrors the exclude list _config.yml used under GitHub Pages/Jekyll.
+build_site.py
+check_site.py
+admin.js
+README.md
+__pycache__/
+.sites-runtime/
