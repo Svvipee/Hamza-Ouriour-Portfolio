@@ -1,7 +1,11 @@
 // Interactive quadrotor model for the UAV case study.
-// Built from primitives with Three.js (vendored in /vendor). No external requests.
+// Loads the SolidWorks quadcopter (models/quadcopter.glb) with Three.js vendored in /vendor.
 import * as THREE from './vendor/three.module.min.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
+import { GLTFLoader } from './vendor/GLTFLoader.js';
+import { MeshoptDecoder } from './vendor/meshopt_decoder.module.js';
+
+const MODEL_URL = new URL('./models/quadcopter.glb', import.meta.url).href;
 
 const host = document.getElementById('uav-3d');
 if (host) init(host);
@@ -28,15 +32,15 @@ function init(host) {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, 1, 0.05, 50);
-  const HOME = new THREE.Vector3(1.25, 0.85, 1.42);
+  const HOME = new THREE.Vector3(0.95, 0.66, 1.08);
   camera.position.copy(HOME);
 
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0.28, 0);
+  controls.target.set(0, 0.34, 0);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.enablePan = false;
-  controls.minDistance = 0.9;
+  controls.minDistance = 0.6;
   controls.maxDistance = 4.2;
   controls.maxPolarAngle = Math.PI * 0.49;
   controls.autoRotate = !reduceMotion;
@@ -78,111 +82,45 @@ function init(host) {
 
   // Landing target pad (vision-guided landing reference)
   const pad = new THREE.Group();
-  const padBase = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.012, 64), new THREE.MeshStandardMaterial({ color: 0xdfe5e9, roughness: 0.9 }));
+  const padBase = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.012, 64), new THREE.MeshStandardMaterial({ color: 0xdfe5e9, roughness: 0.9 }));
   padBase.receiveShadow = true;
   pad.add(padBase);
-  const ring = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.54, 64), new THREE.MeshStandardMaterial({ color: 0x245d80, roughness: 0.8 }));
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.4, 0.435, 64), new THREE.MeshStandardMaterial({ color: 0x245d80, roughness: 0.8 }));
   ring.rotation.x = -Math.PI / 2; ring.position.y = 0.0065; ring.receiveShadow = true;
   pad.add(ring);
   pad.add(makeMarker());
   scene.add(pad);
 
-  // Drone
+  // Drone: Hamza's SolidWorks quadcopter, converted to a compressed glTF
   const drone = new THREE.Group();
   scene.add(drone);
-
-  // Center stack: bottom plate, top plate, standoffs
-  const bottomPlate = mesh(roundedPlate(0.2, 0.26, 0.012, 0.03), M.carbon);
-  bottomPlate.position.y = 0.0;
-  drone.add(bottomPlate);
-  const topPlate = mesh(roundedPlate(0.17, 0.22, 0.008, 0.03), M.plate);
-  topPlate.position.y = 0.07;
-  drone.add(topPlate);
-  for (const [x, z] of [[0.065, 0.09], [-0.065, 0.09], [0.065, -0.09], [-0.065, -0.09]]) {
-    const s = mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.07, 12), M.alu);
-    s.position.set(x, 0.035, z); drone.add(s);
-  }
-  // Flight controller board and status LEDs
-  const fc = mesh(new THREE.BoxGeometry(0.075, 0.006, 0.075), M.board);
-  fc.position.y = 0.035; drone.add(fc);
-  const ledA = new THREE.Mesh(new THREE.SphereGeometry(0.005, 10, 10), M.ledG); ledA.position.set(0.02, 0.041, 0.03); drone.add(ledA);
-  const ledB = new THREE.Mesh(new THREE.SphereGeometry(0.005, 10, 10), M.ledR); ledB.position.set(-0.02, 0.041, 0.03); drone.add(ledB);
-
-  // Battery strapped on top
-  const battery = mesh(roundedBox(0.075, 0.045, 0.15, 0.01), M.battery);
-  battery.position.y = 0.1; drone.add(battery);
-  const strap = mesh(new THREE.BoxGeometry(0.082, 0.05, 0.016), M.accent);
-  strap.position.set(0, 0.1, 0.02); drone.add(strap);
-
-  // LiDAR puck on a mast (VLP-16 style)
-  const mast = mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.06, 12), M.alu);
-  mast.position.set(0, 0.15, -0.09); drone.add(mast);
-  const lidar = new THREE.Group();
-  lidar.position.set(0, 0.2, -0.09);
-  lidar.add(mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.018, 32), M.alu));
-  const window_ = mesh(new THREE.CylinderGeometry(0.041, 0.041, 0.032, 32, 1, true), M.lens);
-  window_.position.y = 0.025; lidar.add(window_);
-  const cap = mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.012, 32), M.alu);
-  cap.position.y = 0.047; lidar.add(cap);
-  drone.add(lidar);
-  const lidarSpinner = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.026, 0.004), new THREE.MeshBasicMaterial({ color: 0x5fd0ff }));
-  lidarSpinner.position.set(0.039, 0.025, 0);
-  const lidarRotor = new THREE.Group(); lidarRotor.add(lidarSpinner); lidarRotor.position.copy(lidar.position); drone.add(lidarRotor);
-
-  // Downward camera gimbal under the frame (landing target tracking)
-  const camMount = mesh(new THREE.BoxGeometry(0.05, 0.02, 0.04), M.dark);
-  camMount.position.set(0, -0.016, 0.07); drone.add(camMount);
-  const camBody = mesh(new THREE.CylinderGeometry(0.016, 0.018, 0.028, 20), M.dark);
-  camBody.position.set(0, -0.04, 0.07); drone.add(camBody);
-  const camLens = mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.006, 20), M.lens);
-  camLens.position.set(0, -0.056, 0.07); drone.add(camLens);
-
-  // Front marker (orange nose) to show heading
-  const nose = mesh(new THREE.ConeGeometry(0.014, 0.035, 16), M.accent);
-  nose.rotation.x = Math.PI / 2; nose.position.set(0, 0.004, 0.145); drone.add(nose);
-
-  // Arms, motors, props (X configuration)
-  const ARM = 0.36;
   const props = [];
-  const armAngles = [45, 135, 225, 315];
-  armAngles.forEach((deg, i) => {
-    const a = THREE.MathUtils.degToRad(deg);
-    const dir = new THREE.Vector3(Math.sin(a), 0, Math.cos(a));
-    const arm = mesh(new THREE.BoxGeometry(0.03, 0.012, ARM), M.carbon);
-    arm.position.copy(dir.clone().multiplyScalar(ARM / 2 + 0.03));
-    arm.rotation.y = a;
-    drone.add(arm);
-
-    const tip = dir.clone().multiplyScalar(ARM + 0.03);
-    // motor mount
-    const mount = mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.008, 24), M.carbon);
-    mount.position.set(tip.x, 0.006, tip.z); drone.add(mount);
-    // stator base and bell
-    const stator = mesh(new THREE.CylinderGeometry(0.026, 0.028, 0.012, 24), M.dark);
-    stator.position.set(tip.x, 0.016, tip.z); drone.add(stator);
-    const bell = mesh(new THREE.CylinderGeometry(0.027, 0.027, 0.028, 28), M.bell);
-    bell.position.set(tip.x, 0.036, tip.z); drone.add(bell);
-    const shaft = mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.022, 10), M.alu);
-    shaft.position.set(tip.x, 0.058, tip.z); drone.add(shaft);
-
-    // landing leg under the motor
-    const leg = mesh(new THREE.CylinderGeometry(0.006, 0.004, 0.12, 10), M.dark);
-    leg.position.set(tip.x * 0.92, -0.056, tip.z * 0.92); drone.add(leg);
-    const foot = mesh(new THREE.SphereGeometry(0.011, 12, 12), M.dark);
-    foot.position.set(tip.x * 0.92, -0.117, tip.z * 0.92); drone.add(foot);
-
-    // propeller: CW on 45/225, CCW on 135/315
-    const spin = (i % 2 === 0) ? 1 : -1;
-    const prop = makeProp(spin);
-    prop.position.set(tip.x, 0.064, tip.z);
-    prop.userData.spin = spin;
-    drone.add(prop);
-    props.push(prop);
-  });
-
-  // Hover height: feet sit 0.117 below origin, pad top at 0.006
-  const BASE_Y = 0.36;
+  const BASE_Y = 0.22;
   drone.position.y = BASE_Y;
+
+  const loader = new GLTFLoader();
+  loader.setMeshoptDecoder(MeshoptDecoder);
+  loader.load(MODEL_URL, (gltf) => {
+    const model = gltf.scene;
+    model.traverse((o) => {
+      if (!o.isMesh) return;
+      o.castShadow = true;
+      o.receiveShadow = true;
+      if (/^prop\d/.test(o.name)) {
+        props.push(o);
+      }
+    });
+    // alternate spin direction around the X layout
+    props.sort((a, b) => Math.atan2(a.position.z, a.position.x) - Math.atan2(b.position.z, b.position.x));
+    props.forEach((o, i) => { o.userData.spin = i % 2 ? -1 : 1; });
+    drone.add(model);
+    host.classList.remove('loading');
+    host.classList.add('ready');
+    wake();
+  }, undefined, () => {
+    host.classList.remove('loading');
+    host.classList.add('no-webgl');
+  });
 
   // Ground shadow catcher beyond the pad
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.ShadowMaterial({ opacity: 0.12 }));
@@ -202,7 +140,7 @@ function init(host) {
   btnProps?.addEventListener('click', () => { propsOn = !propsOn; hover = propsOn; sync(); wake(); });
   btnRotate?.addEventListener('click', () => { controls.autoRotate = !controls.autoRotate; sync(); wake(); });
   btnReset?.addEventListener('click', () => {
-    camera.position.copy(HOME); controls.target.set(0, 0.28, 0); controls.update(); wake();
+    camera.position.copy(HOME); controls.target.set(0, 0.34, 0); controls.update(); wake();
   });
   sync();
 
@@ -235,8 +173,7 @@ function init(host) {
   function tick() {
     const dt = Math.min(clock.getDelta(), 0.05);
     t += dt;
-    if (propsOn) props.forEach(p => { p.rotation.y += p.userData.spin * dt * 60; });
-    lidarRotor.rotation.y += dt * (propsOn ? 12 : 0);
+    if (propsOn) props.forEach(p => { p.rotation.y += p.userData.spin * dt * 45; });
     if (hover) {
       drone.position.y = BASE_Y + Math.sin(t * 1.6) * 0.012;
       drone.rotation.z = Math.sin(t * 0.9) * 0.018;
@@ -248,60 +185,9 @@ function init(host) {
     if (visible && animating) requestAnimationFrame(tick);
     else running = false;
   }
-  host.classList.add('ready');
   wake();
 
   // Geometry helpers
-  function makeProp(spin) {
-    const g = new THREE.Group();
-    const hub = mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.012, 16), M.dark);
-    g.add(hub);
-    for (let k = 0; k < 2; k++) {
-      const shape = new THREE.Shape();
-      const L = 0.125;
-      shape.moveTo(0, -0.006);
-      shape.bezierCurveTo(L * 0.3, -0.022, L * 0.8, -0.018, L, -0.004);
-      shape.bezierCurveTo(L * 1.02, 0.004, L * 0.95, 0.012, L * 0.8, 0.012);
-      shape.bezierCurveTo(L * 0.5, 0.014, L * 0.2, 0.014, 0, 0.006);
-      const blade = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: 0.003, bevelEnabled: false }), M.prop);
-      blade.castShadow = true;
-      // lay the blade flat, then add pitch about its long axis
-      blade.rotation.set(-Math.PI / 2 + spin * 0.18, 0, 0);
-      const arm = new THREE.Group();
-      arm.add(blade);
-      arm.rotation.y = k * Math.PI;
-      g.add(arm);
-    }
-    return g;
-  }
-
-  function roundedPlate(w, d, h, r) {
-    const s = new THREE.Shape();
-    const x = -w / 2, z = -d / 2;
-    s.moveTo(x + r, z);
-    s.lineTo(x + w - r, z); s.quadraticCurveTo(x + w, z, x + w, z + r);
-    s.lineTo(x + w, z + d - r); s.quadraticCurveTo(x + w, z + d, x + w - r, z + d);
-    s.lineTo(x + r, z + d); s.quadraticCurveTo(x, z + d, x, z + d - r);
-    s.lineTo(x, z + r); s.quadraticCurveTo(x, z, x + r, z);
-    const geo = new THREE.ExtrudeGeometry(s, { depth: h, bevelEnabled: false });
-    geo.rotateX(Math.PI / 2);
-    geo.translate(0, h / 2, 0);
-    return geo;
-  }
-
-  function roundedBox(w, h, d, r) {
-    const s = new THREE.Shape();
-    const x = -w / 2, y = -h / 2;
-    s.moveTo(x + r, y);
-    s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
-    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
-    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
-    const geo = new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false });
-    geo.translate(0, 0, -d / 2);
-    return geo;
-  }
-
   // Fiducial-style landing marker drawn on a canvas texture
   function makeMarker() {
     const c = document.createElement('canvas');
@@ -325,7 +211,7 @@ function init(host) {
     const tex = new THREE.CanvasTexture(c);
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 4;
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.42), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85 }));
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.34), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85 }));
     m.rotation.x = -Math.PI / 2; m.position.y = 0.0068; m.receiveShadow = true;
     return m;
   }
