@@ -76,6 +76,8 @@ dict(slug='thermofluids',title='Thermofluids cycle visualizer',category='mechani
 ('next','Next evidence to add',p('Attach the Python source, reference-property data, and validation table, including the pressure and temperature ranges used.'))]),
 ]
 
+UAV_MODEL='''<figure class="model-3d" id="uav-3d" aria-label="Interactive 3D quadrotor model"><div class="model-stage"><span class="model-label">Quadrotor / X configuration</span><div class="model-controls"><button type="button" data-uav="props" aria-pressed="true">Props spinning</button><button type="button" data-uav="rotate" aria-pressed="true">Auto rotate</button><button type="button" data-uav="reset">Reset view</button></div><div class="model-canvas"></div><p class="model-hint">Drag to rotate. Scroll or pinch to zoom.</p><p class="model-fallback">The 3D model needs WebGL, which this browser has turned off.</p></div><figcaption>Interactive model of a quadrotor with a top-mounted LiDAR and a downward camera, hovering over a fiducial landing pad. It illustrates the sensor layout used in this project. It is not the exact simulation airframe.</figcaption></figure><script type="module" src="../uav3d.js"></script>'''
+
 def head(title,description,path,prefix=''):
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{E(title)} | Hamza Ouriour</title><meta name="description" content="{E(description)}"><meta property="og:title" content="{E(title)} | Hamza Ouriour"><meta property="og:description" content="{E(description)}"><meta property="og:type" content="website"><meta property="og:url" content="{BASE+path}"><link rel="canonical" href="{BASE+path}"><meta name="theme-color" content="#142b3e"><link rel="icon" href="{prefix}favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}styles.css"><script defer src="{prefix}site.js"></script></head><body><a class="skip" href="#main">Skip to content</a>'''
 
@@ -120,7 +122,10 @@ def generate():
         content+=f'''<main id="main" class="wrap"><div class="case-hero"><a class="breadcrumb" href="../index.html#projects">← All engineering projects</a><p class="eyebrow">{d['kind']}</p><h1>{d['title']}</h1><p class="lead">{d['summary']}</p><dl class="case-meta">'''
         for label,value in [('Role',d['role']),('Organization / team',d['org']),('Date',d['date']),('Tools / methods',d['tools'])]:
             content+=f'<div><dt>{label}</dt><dd>{value}</dd></div>'
-        content+='</dl></div>'+metrics(d['metrics'])+'<div class="case-layout"><nav class="case-nav" aria-label="On this page">'
+        content+='</dl></div>'+metrics(d['metrics'])
+        if d['slug']=='uav':
+            content+=UAV_MODEL
+        content+='<div class="case-layout"><nav class="case-nav" aria-label="On this page">'
         content+=''.join(f'<a href="#{sid}">{title}</a>' for sid,title,body in d['sections'])+'</nav><article class="case-content">'
         content+=''.join(f'<section id="{sid}"><h2>{title}</h2>{body}</section>' for sid,title,body in d['sections'])
         if d['slug']=='lspace':
